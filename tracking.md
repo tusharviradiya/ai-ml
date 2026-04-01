@@ -1,13 +1,13 @@
 ## Date: 31 March 2026
-- Python Revision - completed
-- DevOps - completed
-- Linux - not completed
-- System Design - not completed
-- Issue-based stories - not completed
+- Python Revision - done
+- DevOps - done
+- Linux - not done
+- System Design - not done
+- Issue-based stories - not done
 
 ## Date: 1 April 2026
-- Python Revision - 
-- DevOps - 
-- Linux - 
+- Python Revision - done
+- DevOps - done
+- Linux - done
 - System Design - 
-- Issue-based stories - 
+- Issue-based stories - prometheus and grafana
