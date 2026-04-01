@@ -9,5 +9,5 @@
 - Python Revision - done
 - DevOps - done
 - Linux - done
-- System Design - 
-- Issue-based stories - prometheus and grafana
+- System Design - done
+- Issue-based stories - done
