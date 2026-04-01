@@ -1,4 +1,13 @@
 ## Date: 31 March 2026
-- DevOps - Day 1 completed.
-- Python Revision - Day 1 completed.
-- Issue-based stories - pending
+- Python Revision - completed
+- DevOps - completed
+- Linux - not completed
+- System Design - not completed
+- Issue-based stories - not completed
+
+## Date: 1 April 2026
+- Python Revision - 
+- DevOps - 
+- Linux - 
+- System Design - 
+- Issue-based stories - 
