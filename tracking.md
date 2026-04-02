@@ -10,4 +10,11 @@
 - DevOps - done
 - Linux - done
 - System Design - done
-- Issue-based stories - done
+- Issue-based stories - prometheus long term storage (in progress)
+
+## Date: 2 April 2026
+- Python Revision - done
+- DevOps - done
+- Linux - done
+- System Design - not done
+- Issue-based stories - not done, multi tenent architecture, __init__.py understanding
