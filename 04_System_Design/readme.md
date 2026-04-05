@@ -1,3 +1,0 @@
-- horizontal scalling : 
-- vertical scalling : 
-- identify critical task and non critical task
