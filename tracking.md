@@ -25,3 +25,6 @@
 - Linux - done
 - System Design - not done
 - Issue-based stories - not done
+
+## Date: 23 August 2026
+- Practice (ML Engineering) - done
