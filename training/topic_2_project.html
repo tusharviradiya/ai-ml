@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project: Mini Shop Billing Counter</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --green: #22c55e;
+    --yellow: #facc15;
+    --red: #f87171;
+    --purple: #a78bfa;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+  header { text-align: center; padding: 32px 0 12px; }
+  header h1 { margin: 0 0 8px; font-size: 2rem; color: var(--accent); }
+  header p { color: var(--muted); margin: 0; }
+  section {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 22px;
+    margin: 20px 0;
+  }
+  h2 { margin: 0 0 12px; font-size: 1.4rem; }
+  h3 { margin: 16px 0 8px; font-size: 1.1rem; color: var(--accent); }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); }
+  .tag {
+    display: inline-block;
+    background: #0f172a;
+    border: 1px solid #334155;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    margin: 3px 4px 3px 0;
+  }
+  pre {
+    background: #020617;
+    border-radius: 10px;
+    padding: 14px;
+    overflow-x: auto;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    border: 1px solid #334155;
+  }
+  code { font-family: Consolas, "Courier New", monospace; }
+
+  /* Topic cards */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .topic {
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 16px;
+    border-left: 4px solid var(--accent);
+  }
+  .topic.loop { border-left-color: var(--purple); }
+  .topic h3 { margin-top: 0; }
+
+  /* Flowchart */
+  .flow { display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 10px 0; }
+  .box {
+    background: #0f172a;
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    padding: 10px 16px;
+    text-align: center;
+    min-width: 260px;
+    font-size: 0.95rem;
+  }
+  .diamond {
+    background: #0f172a;
+    border: 2px solid var(--yellow);
+    padding: 12px 18px;
+    border-radius: 12px;
+    text-align: center;
+    min-width: 260px;
+    font-size: 0.95rem;
+  }
+  .arrow { color: var(--muted); font-size: 1.2rem; }
+  .branches { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
+  .yes { color: var(--green); font-weight: bold; }
+  .no { color: var(--red); font-weight: bold; }
+  .loopback { color: var(--purple); font-size: 0.9rem; }
+
+  /* Interactive discount demo */
+  .demo-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin: 10px 0; }
+  input[type=range] { flex: 1; min-width: 180px; accent-color: var(--accent); }
+  .qty-label { font-size: 1.4rem; font-weight: bold; color: var(--accent); min-width: 110px; }
+  .branch-list { display: grid; gap: 8px; margin-top: 12px; }
+  .branch {
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #0f172a;
+    border: 2px solid #334155;
+    opacity: 0.45;
+    transition: all 0.25s;
+  }
+  .branch.active {
+    opacity: 1;
+    border-color: var(--green);
+    background: #052e16;
+  }
+  .result {
+    margin-top: 12px;
+    padding: 12px;
+    background: #0f172a;
+    border-radius: 10px;
+    font-family: Consolas, monospace;
+  }
+
+  /* Loop visualizer */
+  .loop-items { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+  .item {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #0f172a;
+    border: 2px solid #334155;
+    transition: all 0.25s;
+  }
+  .item.current { border-color: var(--purple); background: #2e1065; transform: scale(1.05); }
+  .item.done { border-color: var(--green); opacity: 0.7; }
+  button {
+    background: var(--accent);
+    color: #0f172a;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.95rem;
+  }
+  button:hover { filter: brightness(1.1); }
+  button.secondary { background: #334155; color: var(--text); }
+
+  /* Checklist */
+  .check { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
+  .check input { margin-top: 6px; width: 18px; height: 18px; accent-color: var(--green); }
+
+  /* Receipt */
+  .receipt {
+    background: #fefce8;
+    color: #111827;
+    font-family: Consolas, monospace;
+    padding: 16px;
+    border-radius: 8px;
+    max-width: 380px;
+    margin: 10px auto 0;
+    white-space: pre;
+    font-size: 0.92rem;
+  }
+
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; position: relative; padding: 8px 0 8px 44px; }
+  .steps li::before {
+    content: counter(step);
+    position: absolute; left: 0; top: 6px;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--accent); color: #0f172a;
+    font-weight: bold; display: flex; align-items: center; justify-content: center;
+  }
+  footer { text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Mini Shop Billing Counter</h1>
+    <p>A visual guide to Conditional Statements and Loops in Python</p>
+  </header>
+
+  <!-- 1. Story -->
+  <section>
+    <h2>1. The Problem</h2>
+    <p>
+      You work at a small shop. A customer keeps adding items to their bill.
+      Your program must do three things:
+    </p>
+    <ul>
+      <li><strong>Repeat</strong> the question "What else would you like?" until the customer says <code>done</code>. <span class="tag">Loop</span></li>
+      <li><strong>Decide</strong> the discount based on how many of one item were bought. <span class="tag">Conditionals</span></li>
+      <li><strong>Decide</strong> whether delivery is free based on the final total. <span class="tag">Conditionals</span></li>
+    </ul>
+    <p class="muted">
+      Real shops do exactly this. The topics are not just theory; they are the tools that make the counter work.
+    </p>
+  </section>
+
+  <!-- 2. Concepts -->
+  <section>
+    <h2>2. The Two Tools You Will Use</h2>
+    <div class="grid">
+      <div class="topic">
+        <h3>Conditional Statements</h3>
+        <p><strong>Idea:</strong> Make a decision. Do something only if a condition is true.</p>
+        <p class="muted">Real life: "If it rains, take an umbrella. Otherwise, wear sunglasses."</p>
+        <pre><code>if qty >= 5:
+    discount = 10
+elif qty >= 3:
+    discount = 5
+else:
+    discount = 0</code></pre>
+      </div>
+      <div class="topic loop">
+        <h3>Loops (for, while)</h3>
+        <p><strong>Idea:</strong> Repeat an action without writing it again and again.</p>
+        <p class="muted">Real life: "Keep scanning items until the cart is empty."</p>
+        <pre><code># while: repeat until a condition stops it
+while item != "done":
+    ...
+
+# for: repeat once for each item in a list
+for item in items:
+    print(item)</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Flowchart -->
+  <section>
+    <h2>3. How the Program Thinks (Flowchart)</h2>
+    <p class="muted">Read from top to bottom. Yellow diamonds are decisions. Purple arrows show repetition.</p>
+    <div class="flow">
+      <div class="box">Start: bill = 0</div>
+      <div class="arrow">↓</div>
+      <div class="diamond"><strong>Did customer type "done"?</strong></div>
+      <div class="branches">
+        <div><span class="yes">YES</span> → Go to the final bill ↓</div>
+        <div><span class="no">NO</span> ↓</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="box">Ask for item name, price, quantity</div>
+      <div class="arrow">↓</div>
+      <div class="diamond"><strong>Quantity ≥ 5?</strong></div>
+      <div class="branches">
+        <div><span class="yes">YES</span> → 10% off</div>
+        <div><span class="no">NO</span> → <strong>Quantity ≥ 3?</strong> → 5% off or no discount</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="box">Add item total to bill</div>
+      <div class="loopback">↺ Loop back to the first question</div>
+      <div class="arrow">↓ (when "done")</div>
+      <div class="diamond"><strong>Bill > 1000?</strong></div>
+      <div class="branches">
+        <div><span class="yes">YES</span> → Free delivery</div>
+        <div><span class="no">NO</span> → Add ₹50 delivery fee</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="box">Print receipt</div>
+    </div>
+  </section>
+
+  <!-- 4. Interactive decision demo -->
+  <section>
+    <h2>4. Try It: Which Branch Runs?</h2>
+    <p class="muted">Drag the slider to change the quantity. Watch which discount branch the program picks.</p>
+    <div class="demo-row">
+      <input type="range" id="qty" min="0" max="8" value="1">
+      <div class="qty-label">Qty: <span id="qtyVal">1</span></div>
+    </div>
+    <div class="branch-list">
+      <div class="branch" id="b1">
+        <strong>if qty ≥ 5</strong> → 10% discount
+      </div>
+      <div class="branch" id="b2">
+        <strong>elif qty ≥ 3</strong> → 5% discount
+      </div>
+      <div class="branch" id="b3">
+        <strong>else</strong> → no discount
+      </div>
+    </div>
+    <div class="result" id="calc"></div>
+    <p class="muted">Price used in this demo: ₹200 per item. Notice that only ONE branch runs each time.</p>
+  </section>
+
+  <!-- 5. Loop visualizer -->
+  <section>
+    <h2>5. Try It: How a Loop Walks Through Items</h2>
+    <p class="muted">Click <strong>Next</strong> to move through a <code>for</code> loop one item at a time.</p>
+    <div class="loop-items" id="items"></div>
+    <div class="result" id="loopOut">Loop has not started.</div>
+    <div class="demo-row">
+      <button id="nextBtn">Next item</button>
+      <button id="resetBtn" class="secondary">Reset</button>
+    </div>
+  </section>
+
+  <!-- 6. Code -->
+  <section>
+    <h2>6. The Core Code (Read It Slowly)</h2>
+    <pre><code>bill = 0
+
+while True:                              # Loop: repeat until "done"
+    item = input("Item name (or 'done'): ")
+    if item == "done":                   # Decision: stop the loop?
+        break
+
+    price = float(input("Price: "))
+    qty = int(input("Quantity: "))
+    total = price * qty
+
+    if qty >= 5:                         # Decision: discount tier
+        total = total * 0.90
+    elif qty >= 3:
+        total = total * 0.95
+
+    bill = bill + total
+
+if bill > 1000:                          # Decision: delivery fee
+    delivery = 0
+else:
+    delivery = 50
+
+print("Final bill:", bill + delivery)</code></pre>
+    <p class="muted">Tip: Read the code next to the flowchart. Each <code>if</code> matches a yellow diamond. Each <code>while</code> matches a purple loop.</p>
+  </section>
+
+  <!-- 7. Example receipt -->
+  <section>
+    <h2>7. Example Receipt</h2>
+    <p class="muted">What the finished program should print for this session:</p>
+    <div class="receipt">SHOP BILLING COUNTER
+--------------------------
+Pen      x 6   @ 20   -10%
+Notebook x 2   @ 150
+--------------------------
+Subtotal                 
+Delivery fee:            50
+--------------------------
+TOTAL:                  ...</div>
+    <p class="muted" style="text-align:center">Your exact layout can differ. The discount and total logic must be correct.</p>
+  </section>
+
+  <!-- 8. Task & acceptance -->
+  <section>
+    <h2>8. Your Task</h2>
+    <ol class="steps">
+      <li>Keep asking for items in a <strong>while</strong> loop until the customer types <code>done</code>.</li>
+      <li>For each item, ask for price and quantity, then calculate its total.</li>
+      <li>Use <strong>if / elif / else</strong> to apply the right discount tier.</li>
+      <li>Add each item total to the bill.</li>
+      <li>After the loop, use an <strong>if / else</strong> to add or skip the ₹50 delivery fee (free if bill is above ₹1000).</li>
+      <li>Print the final bill.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>9. Acceptance Criteria (Tick As You Go)</h2>
+    <div class="check"><input type="checkbox" id="c1"><label for="c1">The program keeps asking for items until the user types <code>done</code>.</label></div>
+    <div class="check"><input type="checkbox" id="c2"><label for="c2">A quantity of 5 or more gets exactly 10% off.</label></div>
+    <div class="check"><input type="checkbox" id="c3"><label for="c3">A quantity of 3 or 4 gets exactly 5% off.</label></div>
+    <div class="check"><input type="checkbox" id="c4"><label for="c4">A quantity of 1 or 2 gets no discount.</label></div>
+    <div class="check"><input type="checkbox" id="c5"><label for="c5">Only one discount branch runs for each item.</label></div>
+    <div class="check"><input type="checkbox" id="c6"><label for="c6">A bill above ₹1000 has free delivery; otherwise ₹50 is added.</label></div>
+    <div class="check"><input type="checkbox" id="c7"><label for="c7">The program runs without errors for at least two different shopping sessions.</label></div>
+    <div class="check"><input type="checkbox" id="c8"><label for="c8">You can explain in your own words why we use a loop here instead of writing the question many times.</label></div>
+  </section>
+
+  <section>
+    <h2>10. Self-Check Questions</h2>
+    <p>1. In the discount logic, why does the order of <code>if</code> and <code>elif</code> matter? What would happen if you checked <code>qty >= 3</code> first?</p>
+    <p>2. What is the difference between a <code>while</code> loop and a <code>for</code> loop? Which one did you use for the shopping items, and why?</p>
+    <p>3. What does <code>break</code> do?</p>
+  </section>
+
+  <footer>Build it step by step. Test with at least two different shopping sessions.</footer>
+</div>
+
+<script>
+  // Discount demo
+  const slider = document.getElementById('qty');
+  const qtyVal = document.getElementById('qtyVal');
+  const b1 = document.getElementById('b1');
+  const b2 = document.getElementById('b2');
+  const b3 = document.getElementById('b3');
+  const calc = document.getElementById('calc');
+  const PRICE = 200;
+
+  function updateDemo() {
+    const qty = Number(slider.value);
+    qtyVal.textContent = qty;
+    [b1, b2, b3].forEach(b => b.classList.remove('active'));
+    let discount = 0;
+    let branch;
+    if (qty >= 5) { discount = 10; branch = b1; }
+    else if (qty >= 3) { discount = 5; branch = b2; }
+    else { discount = 0; branch = b3; }
+    branch.classList.add('active');
+    const subtotal = PRICE * qty;
+    const total = subtotal * (1 - discount / 100);
+    calc.textContent = `subtotal = ${PRICE} x ${qty} = ${subtotal}   |   discount = ${discount}%   |   total = ${total}`;
+  }
+  slider.addEventListener('input', updateDemo);
+  updateDemo();
+
+  // Loop visualizer
+  const itemsData = ['Pen', 'Notebook', 'Eraser', 'Ruler'];
+  const itemsEl = document.getElementById('items');
+  const loopOut = document.getElementById('loopOut');
+  let index = -1;
+
+  itemsData.forEach((name, i) => {
+    const d = document.createElement('div');
+    d.className = 'item';
+    d.id = 'item' + i;
+    d.textContent = name;
+    itemsEl.appendChild(d);
+  });
+
+  function resetLoop() {
+    index = -1;
+    itemsData.forEach((_, i) => document.getElementById('item' + i).className = 'item');
+    loopOut.textContent = 'Loop has not started.';
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    if (index >= 0) document.getElementById('item' + index).className = 'item done';
+    index++;
+    if (index < itemsData.length) {
+      document.getElementById('item' + index).className = 'item current';
+      loopOut.textContent = `for item in items:  →  item = "${itemsData[index]}"  (repeat step ${index + 1} of ${itemsData.length})`;
+    } else {
+      loopOut.textContent = 'Loop finished: every item has been visited once. The program moves on.';
+      index = itemsData.length;
+    }
+  });
+  document.getElementById('resetBtn').addEventListener('click', resetLoop);
+</script>
+</body>
+</html>

@@ -30,7 +30,7 @@ figures/
 *.jpg
 *.jpeg
 *.svg
-*.pdf
+# *.pdf
 
 # Research notebooks and temporary files
 research_notebooks/
@@ -43,7 +43,7 @@ prototype/
 # Data profiling reports
 profiling_reports/
 data_quality/
-*.html
+# *.html
 report_*.json
 
 # Virtual environment
