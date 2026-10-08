@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project: Mini Online Store</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --green: #22c55e;
+    --yellow: #facc15;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+  header { text-align: center; padding: 32px 0 12px; }
+  header h1 { margin: 0 0 8px; font-size: 2rem; color: var(--accent); }
+  header p { color: var(--muted); margin: 0; }
+  section { background: var(--card); border-radius: 14px; padding: 22px; margin: 20px 0; }
+  h2 { margin: 0 0 12px; font-size: 1.4rem; }
+  h3 { margin: 6px 0 8px; font-size: 1.1rem; color: var(--accent); }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); }
+  .tag {
+    display: inline-block; background: #0f172a; border: 1px solid #334155;
+    padding: 3px 10px; border-radius: 999px; font-size: 0.85rem; margin: 3px 4px 3px 0;
+  }
+  pre {
+    background: #020617; border-radius: 10px; padding: 14px; overflow-x: auto;
+    font-size: 0.9rem; line-height: 1.5; border: 1px solid #334155;
+  }
+  code { font-family: Consolas, "Courier New", monospace; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .topic { background: #0f172a; border-radius: 12px; padding: 16px; border-left: 4px solid var(--accent); }
+  .topic.c2 { border-left-color: var(--purple); }
+  .topic.c3 { border-left-color: var(--green); }
+  .topic h3 { margin-top: 0; }
+  .demo { background: #0f172a; border-radius: 12px; padding: 16px; margin-top: 12px; }
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 8px 0; }
+  input[type=text], input[type=number], select {
+    padding: 8px; border-radius: 8px; background: #1e293b; color: var(--text);
+    border: 1px solid #334155; min-width: 140px;
+  }
+  .out {
+    margin-top: 10px; padding: 12px; background: #020617; border-radius: 10px;
+    font-family: Consolas, monospace; white-space: pre-wrap; font-size: 0.92rem; min-height: 44px;
+  }
+  .ok { color: var(--green); }
+  .bad { color: var(--red); }
+  button {
+    background: var(--accent); color: #0f172a; border: none; padding: 9px 16px;
+    border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.95rem;
+  }
+  button:hover { filter: brightness(1.1); }
+  button.secondary { background: #334155; color: var(--text); }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #334155; vertical-align: top; }
+  th { color: var(--accent); }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; position: relative; padding: 8px 0 8px 44px; }
+  .steps li::before {
+    content: counter(step); position: absolute; left: 0; top: 6px;
+    width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #0f172a;
+    font-weight: bold; display: flex; align-items: center; justify-content: center;
+  }
+  .check { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
+  .check input { margin-top: 6px; width: 18px; height: 18px; accent-color: var(--green); }
+  footer { text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Mini Online Store</h1>
+    <p>A visual guide to Metaclasses, Decorators in Classes and Abstract Base Classes</p>
+  </header>
+
+  <!-- 1. Problem -->
+  <section>
+    <h2>1. The Problem</h2>
+    <p>An online store sells different kinds of products: books, electronics, and more. The store software must:</p>
+    <ul>
+      <li><strong>Automatically know every product type</strong> that has been defined, and refuse any type that is incomplete. <span class="tag">Metaclass</span></li>
+      <li><strong>Block a purchase when stock is empty</strong> and log every purchase, without repeating that code in each product. <span class="tag">Decorators in classes</span></li>
+      <li><strong>Force every product type to define its own shipping cost</strong>, and stop anyone creating a generic "Product" by mistake. <span class="tag">Abstract base class</span></li>
+    </ul>
+    <p class="muted">These are the tools that big frameworks use behind the scenes. You will meet them when reading library code.</p>
+  </section>
+
+  <!-- 2. Concepts -->
+  <section>
+    <h2>2. The Three Ideas</h2>
+    <div class="grid">
+      <div class="topic">
+        <h3>Metaclasses</h3>
+        <p><strong>Idea:</strong> A class is an object too. A metaclass is the class that builds classes. It runs when a class is <em>defined</em>.</p>
+        <p class="muted">Real life: a factory inspector who checks every new product design before it is allowed on the shelf.</p>
+        <pre><code>class ProductMeta(ABCMeta):
+    registry = {}
+    def __new__(mcs, name, bases, namespace):
+        cls = super().__new__(mcs, name, bases, namespace)
+        if bases:
+            mcs.registry[name] = cls
+        return cls</code></pre>
+      </div>
+      <div class="topic c2">
+        <h3>Decorators in Classes</h3>
+        <p><strong>Idea:</strong> A decorator wraps a method with extra behaviour. Here, the wrapper runs checks before the method and can log after it.</p>
+        <p class="muted">Real life: a security guard at the door of a shop, checking every customer before they enter.</p>
+        <pre><code>def require_stock(func):
+    def wrapper(self, *args, **kwargs):
+        if self.stock &lt;= 0:
+            raise ValueError("Out of stock")
+        return func(self, *args, **kwargs)
+    return wrapper
+
+class Product:
+    @require_stock
+    def purchase(self):
+        ...</code></pre>
+      </div>
+      <div class="topic c3">
+        <h3>Abstract Base Classes</h3>
+        <p><strong>Idea:</strong> A class that cannot be used directly. It lists methods that every child <em>must</em> write.</p>
+        <p class="muted">Real life: a job description that says "must be able to drive" — every applicant has to show it.</p>
+        <pre><code>from abc import ABC, abstractmethod
+
+class Product(ABC):
+    @abstractmethod
+    def shipping_cost(self):
+        ...
+
+Product()   # TypeError: cannot instantiate</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Interactive: metaclass registry -->
+  <section>
+    <h2>3. Try It: The Metaclass Registry</h2>
+    <p class="muted">Define a new product type. The metaclass checks it and adds it to the store's registry automatically. Every type must have a <code>category</code>.</p>
+    <div class="demo">
+      <div class="row">
+        <input type="text" id="typeName" value="Toy">
+        <label><input type="checkbox" id="hasCat" checked> defines <code>category</code></label>
+        <button id="defineBtn">Define class</button>
+      </div>
+      <pre><code>class Toy(Product):        # the metaclass runs right here
+    category = "toy"</code></pre>
+      <div class="out" id="regOut">Registry: Book, Electronics</div>
+    </div>
+  </section>
+
+  <!-- 4. Interactive: decorator -->
+  <section>
+    <h2>4. Try It: Decorator Guards the Purchase</h2>
+    <p class="muted">Each click calls <code>purchase()</code>. The decorator checks stock first and logs every attempt.</p>
+    <div class="demo">
+      <div class="row">
+        <span>Stock left: <strong id="stockVal">2</strong></span>
+        <button id="buyBtn">book.purchase()</button>
+        <button id="restockBtn" class="secondary">Restock (+2)</button>
+      </div>
+      <div class="out" id="decOut">Log is empty.</div>
+    </div>
+  </section>
+
+  <!-- 5. Interactive: ABC -->
+  <section>
+    <h2>5. Try It: Abstract Base Class Rules</h2>
+    <p class="muted">Pick a class to create. The abstract <code>Product</code> cannot be created, and a child that forgets <code>shipping_cost()</code> is rejected.</p>
+    <div class="demo">
+      <div class="row">
+        <select id="abcPick">
+          <option value="Product">Product (abstract)</option>
+          <option value="Book">Book (has shipping_cost)</option>
+          <option value="Magazine">Magazine (forgot shipping_cost)</option>
+        </select>
+        <button id="abcBtn">Create object</button>
+      </div>
+      <div class="out" id="abcOut">Choose a class and press the button.</div>
+    </div>
+  </section>
+
+  <!-- 6. Code -->
+  <section>
+    <h2>6. The Core Code (Read It Slowly)</h2>
+    <pre><code>from abc import ABC, abstractmethod, ABCMeta
+
+# ---------- 1. METACLASS: runs when a product class is DEFINED ----------
+class ProductMeta(ABCMeta):
+    registry = {}
+
+    def __new__(mcs, name, bases, namespace):
+        cls = super().__new__(mcs, name, bases, namespace)
+        if bases:                                  # skip the base class itself
+            if "category" not in namespace:
+                raise TypeError(f"{name} must define category")
+            mcs.registry[name] = cls               # register automatically
+        return cls
+
+# ---------- 2. DECORATOR: wraps a method ----------
+def require_stock(func):
+    def wrapper(self, *args, **kwargs):
+        if self.stock &lt;= 0:
+            raise ValueError(f"{self.name} is out of stock")
+        print(f"[log] purchasing {self.name}")
+        return func(self, *args, **kwargs)
+    return wrapper
+
+# ---------- 3. ABSTRACT BASE CLASS: a rule every child must follow ----------
+class Product(metaclass=ProductMeta):
+    def __init__(self, name, price, stock):
+        self.name = name
+        self.price = price
+        self.stock = stock
+
+    @abstractmethod
+    def shipping_cost(self):
+        ...
+
+    @require_stock
+    def purchase(self):
+        self.stock -= 1
+        return self.price + self.shipping_cost()
+
+class Book(Product):
+    category = "book"
+    def shipping_cost(self):
+        return 40
+
+class Electronics(Product):
+    category = "electronics"
+    def shipping_cost(self):
+        return 150
+
+book = Book("Dune", 500, stock=2)
+book.purchase()                 # [log] purchasing Dune  -> 540
+Product("x", 1, 1)              # TypeError: abstract method</code></pre>
+    <p class="muted">Three tools, three jobs: the metaclass checks the class when it is defined, the decorator wraps the method when it is called, and the ABC rule is checked when an object is created.</p>
+  </section>
+
+  <!-- 7. Task -->
+  <section>
+    <h2>7. Your Task</h2>
+    <ol class="steps">
+      <li>Write a metaclass <code>ProductMeta</code> that registers every product class by name and refuses a class without a <code>category</code>.</li>
+      <li>Write a decorator <code>require_stock</code> that blocks <code>purchase()</code> when stock is 0 and prints a log line for each purchase.</li>
+      <li>Write an abstract <code>Product</code> class with an abstract <code>shipping_cost()</code> method.</li>
+      <li>Create <code>Book</code> and <code>Electronics</code> children, each with its own shipping cost and <code>category</code>.</li>
+      <li>Show that <code>Product(...)</code> cannot be created, and that a child without <code>shipping_cost()</code> cannot be created either.</li>
+      <li>Print the registry, then buy items until the stock runs out and show the error.</li>
+    </ol>
+  </section>
+
+  <!-- 8. Acceptance -->
+  <section>
+    <h2>8. Acceptance Criteria (Tick As You Go)</h2>
+    <div class="check"><input type="checkbox" id="a1"><label for="a1">Defining a product class without <code>category</code> raises a clear error at definition time.</label></div>
+    <div class="check"><input type="checkbox" id="a2">Every valid product class appears in the registry automatically, with no manual list.</div>
+    <div class="check"><input type="checkbox" id="a3"><code>purchase()</code> is blocked when stock is 0, and the decorator is the only place that checks stock.</div>
+    <div class="check"><input type="checkbox" id="a4">Each purchase prints a log line, and the <code>purchase()</code> method itself has no print statement.</div>
+    <div class="check"><input type="checkbox" id="a5"><code>Product()</code> raises a <code>TypeError</code>, so the abstract class cannot be created.</div>
+    <div class="check"><input type="checkbox" id="a6">A child class that does not define <code>shipping_cost()</code> cannot be created.</div>
+    <div class="check"><input type="checkbox" id="a7">The program runs without errors for at least two different product lists.</div>
+    <div class="check"><input type="checkbox" id="a8">You can explain in your own words when each of the three tools runs: definition time, call time, or object creation time.</div>
+  </section>
+
+  <!-- 9. Self-check -->
+  <section>
+    <h2>9. Self-Check Questions</h2>
+    <p>1. Is a metaclass used when you create an object, or when you define a class? Explain in one sentence.</p>
+    <p>2. What does a decorator receive as its input, and what does it return?</p>
+    <p>3. Why is <code>Product</code> an abstract base class instead of a normal class?</p>
+    <p>4. Why would a store want to put stock checks inside a decorator rather than inside every product's <code>purchase()</code>?</p>
+  </section>
+
+  <footer>Start with the abstract base class, then add the decorator, and add the metaclass last.</footer>
+</div>
+
+<script>
+  // NOTE: JavaScript has no metaclasses or abstract base classes.
+  // These demos copy the behaviour, so the Python code is the real thing to learn from.
+
+  // 3. Metaclass registry mirror
+  const registry = ['Book', 'Electronics'];
+  document.getElementById('defineBtn').addEventListener('click', () => {
+    const name = document.getElementById('typeName').value.trim();
+    const hasCat = document.getElementById('hasCat').checked;
+    const out = document.getElementById('regOut');
+    if (!name) {
+      out.innerHTML = '<span class="bad">Enter a class name.</span>';
+      return;
+    }
+    if (!hasCat) {
+      out.innerHTML = `<span class="bad">TypeError: ${name} must define category</span>\nRegistry: ${registry.join(', ')}`;
+      return;
+    }
+    if (!registry.includes(name)) registry.push(name);
+    out.innerHTML = `<span class="ok">Registered ${name} automatically.</span>\nRegistry: ${registry.join(', ')}`;
+  });
+
+  // 4. Decorator mirror
+  let stock = 2;
+  const log = [];
+  const decOut = document.getElementById('decOut');
+  function render() {
+    document.getElementById('stockVal').textContent = stock;
+    decOut.textContent = log.length ? log.join('\n') : 'Log is empty.';
+  }
+  document.getElementById('buyBtn').addEventListener('click', () => {
+    if (stock <= 0) {
+      log.push('ValueError: Dune is out of stock   (blocked by require_stock)');
+    } else {
+      stock -= 1;
+      log.push('[log] purchasing Dune  ->  total 540');
+    }
+    render();
+  });
+  document.getElementById('restockBtn').addEventListener('click', () => {
+    stock += 2;
+    log.push('(restocked 2 copies)');
+    render();
+  });
+  render();
+
+  // 5. ABC mirror
+  class Product {
+    constructor(name) {
+      if (new.target === Product) throw new TypeError('Cannot instantiate abstract Product');
+      if (typeof this.shippingCost !== 'function') {
+        throw new TypeError(`${new.target.name} must implement shippingCost()`);
+      }
+      this.name = name;
+    }
+  }
+  class Book extends Product {
+    shippingCost() { return 40; }
+  }
+  class Magazine extends Product {
+    // forgot shippingCost()
+  }
+  document.getElementById('abcBtn').addEventListener('click', () => {
+    const pick = document.getElementById('abcPick').value;
+    const classes = { Product, Book, Magazine };
+    const out = document.getElementById('abcOut');
+    try {
+      const obj = new classes[pick](pick);
+      out.innerHTML = `<span class="ok">Created ${pick} object: ${obj.name}</span>`;
+    } catch (e) {
+      out.innerHTML = `<span class="bad">${e.name}: ${e.message}</span>`;
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assignment: Create a Family Tree</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --green: #22c55e;
+    --yellow: #facc15;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+  header { text-align: center; padding: 32px 0 12px; }
+  header h1 { margin: 0 0 8px; font-size: 2rem; color: var(--accent); }
+  header p { color: var(--muted); margin: 0; }
+  section { background: var(--card); border-radius: 14px; padding: 22px; margin: 20px 0; }
+  h2 { margin: 0 0 12px; font-size: 1.4rem; }
+  h3 { margin: 6px 0 8px; font-size: 1.1rem; color: var(--accent); }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); }
+  .tag {
+    display: inline-block; background: #0f172a; border: 1px solid #334155;
+    padding: 3px 10px; border-radius: 999px; font-size: 0.85rem; margin: 3px 4px 3px 0;
+  }
+  pre {
+    background: #020617; border-radius: 10px; padding: 14px; overflow-x: auto;
+    font-size: 0.9rem; line-height: 1.5; border: 1px solid #334155;
+  }
+  code { font-family: Consolas, "Courier New", monospace; }
+  .problem { border-left: 4px solid var(--yellow); background: #0f172a; border-radius: 12px; padding: 16px; }
+  .goal { border-left: 4px solid var(--green); background: #0f172a; border-radius: 12px; padding: 16px; margin-top: 12px; }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; position: relative; padding: 8px 0 8px 44px; }
+  .steps li::before {
+    content: counter(step); position: absolute; left: 0; top: 6px;
+    width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #0f172a;
+    font-weight: bold; display: flex; align-items: center; justify-content: center;
+  }
+  .check { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
+  .check input { margin-top: 6px; width: 18px; height: 18px; accent-color: var(--green); }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #334155; vertical-align: top; }
+  th { color: var(--accent); }
+  .demo { background: #0f172a; border-radius: 12px; padding: 16px; margin-top: 12px; }
+  .gen-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .gen {
+    flex: 1; min-width: 180px; padding: 12px; border-radius: 10px; border: 2px solid #334155;
+    background: #020617; cursor: pointer; transition: all 0.2s;
+  }
+  .gen:hover { border-color: var(--accent); }
+  .gen.sel { border-color: var(--green); background: #052e16; }
+  .gen h3 { margin: 0 0 4px; }
+  .out {
+    margin-top: 10px; padding: 12px; background: #020617; border-radius: 10px;
+    font-family: Consolas, monospace; white-space: pre-wrap; font-size: 0.92rem; min-height: 44px;
+  }
+  .note { color: var(--yellow); font-size: 0.92rem; }
+  footer { text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Assignment: Create a Family Tree</h1>
+    <p>Multilevel Inheritance in Python &middot; Level: Junior &middot; Estimated time: 2 to 3 hours</p>
+  </header>
+
+  <!-- 1. Problem statement -->
+  <section>
+    <h2>1. Problem Statement</h2>
+    <div class="problem">
+      <p>A family wants a small program that describes its family tree. Each generation <strong>inherits</strong> traits from the generation before it.</p>
+      <p>The tree has three generations:</p>
+      <ul>
+        <li><strong>Grandparent</strong>: knows the family surname and where the family comes from.</li>
+        <li><strong>Parent</strong>: inherits everything from the Grandparent, and adds education and a profession.</li>
+        <li><strong>Child</strong>: inherits everything from the Parent, and adds hobbies and a school.</li>
+      </ul>
+      <p>You will build this as three classes that form a chain: <code>Child</code> &rarr; <code>Parent</code> &rarr; <code>Grandparent</code>. This pattern is called <strong>multilevel inheritance</strong>.</p>
+    </div>
+    <div class="goal">
+      <p><strong>Goal:</strong> By the end, you should be able to create a chain of classes where each child class reuses its parent's code using <code>super()</code>, and where one method can read data from every generation.</p>
+    </div>
+    <p class="muted" style="margin-top:12px">Topics covered: <span class="tag">Classes</span><span class="tag">Objects</span><span class="tag">Inheritance</span><span class="tag">super()</span><span class="tag">Methods</span><span class="tag">Attributes</span></p>
+  </section>
+
+  <!-- 2. Interactive: inheritance chain -->
+  <section>
+    <h2>2. Understand the Chain First</h2>
+    <p class="muted">Click each generation. The green box shows what that class has, including what it inherits from above.</p>
+    <div class="demo">
+      <div class="gen-row">
+        <div class="gen sel" id="g1" onclick="showGen(1)">
+          <h3>Grandparent</h3>
+          <div class="muted">own: surname, origin<br>methods: family_origin()</div>
+        </div>
+        <div class="gen" id="g2" onclick="showGen(2)">
+          <h3>Parent</h3>
+          <div class="muted">own: education, job<br>methods: profession()</div>
+        </div>
+        <div class="gen" id="g3" onclick="showGen(3)">
+          <h3>Child</h3>
+          <div class="muted">own: hobbies, school<br>methods: current_school()</div>
+        </div>
+      </div>
+      <div class="out" id="chainOut"></div>
+    </div>
+  </section>
+
+  <!-- 3. Task -->
+  <section>
+    <h2>3. Your Task</h2>
+    <ol class="steps">
+      <li><strong>Grandparent class.</strong> Create a class <code>Grandparent</code> with an <code>__init__</code> that takes <code>surname</code> and <code>origin</code>. Add a method <code>family_origin()</code> that returns a sentence such as <code>"The Sharma family comes from Gujarat."</code></li>
+      <li><strong>Parent class.</strong> Create a class <code>Parent</code> that inherits from <code>Grandparent</code>. Its <code>__init__</code> takes <code>surname</code>, <code>origin</code>, <code>education</code> and <code>job</code>. Call <code>super().__init__()</code> to set the Grandparent's attributes. Add a method <code>profession()</code> that returns a sentence using the job and education.</li>
+      <li><strong>Child class.</strong> Create a class <code>Child</code> that inherits from <code>Parent</code>. Its <code>__init__</code> takes all the Parent's inputs plus <code>hobbies</code> (a list) and <code>school</code>. Call <code>super().__init__()</code> to set the Parent's attributes. Add a method <code>current_school()</code> that returns a sentence about the school.</li>
+      <li><strong>Create one Child object</strong> with sample values for every field, and call each method once to check it works.</li>
+      <li><strong>Challenge (see Section 5).</strong> Add a method <code>family_history()</code> to <code>Child</code> that prints the full family history.</li>
+    </ol>
+  </section>
+
+  <!-- 4. Starter skeleton -->
+  <section>
+    <h2>4. Starter Code (Fill In the Blanks)</h2>
+    <p class="muted">Complete every part marked <code># TODO</code>. Do not change the class or method names; they are checked in the acceptance criteria.</p>
+    <pre><code>class Grandparent:
+    def __init__(self, surname, origin):
+        self.surname = surname
+        self.origin = origin            # TODO: is this line correct?
+
+    def family_origin(self):
+        # TODO: return a sentence like "The Sharma family comes from Gujarat."
+        pass
+
+
+class Parent(Grandparent):
+    def __init__(self, surname, origin, education, job):
+        # TODO: call the Grandparent's __init__ using super()
+        self.education = education
+        self.job = job
+
+    def profession(self):
+        # TODO: return a sentence using self.job and self.education
+        pass
+
+
+class Child(Parent):
+    def __init__(self, surname, origin, education, job, hobbies, school):
+        # TODO: call the Parent's __init__ using super()
+        self.hobbies = hobbies
+        self.school = school
+
+    def current_school(self):
+        # TODO: return a sentence using self.school
+        pass
+
+
+# TODO: create one Child object and call all three methods</code></pre>
+  </section>
+
+  <!-- 5. Challenge -->
+  <section>
+    <h2>5. Challenge: Show the Full Family History</h2>
+    <p>Add a method <code>family_history()</code> to <code>Child</code>. It should print the whole story, reading attributes and methods that come from <strong>all three</strong> generations.</p>
+    <p class="muted">Hint: a <code>Child</code> object already has every attribute from <code>Parent</code> and <code>Grandparent</code>, so you can read <code>self.surname</code>, <code>self.education</code> and so on. You can also call <code>self.family_origin()</code> and <code>self.profession()</code> directly.</p>
+    <p class="note">Important: do not copy the Parent's and Grandparent's code into <code>family_history()</code>. Reuse their methods.</p>
+    <p style="margin-top:12px"><strong>Expected output</strong> for a Child created with surname <code>"Sharma"</code>, origin <code>"Gujarat"</code>, education <code>"B.Com"</code>, job <code>"accountant"</code>, hobbies <code>["cricket", "drawing"]</code>, school <code>"Kendriya Vidyalaya"</code>:</p>
+    <pre><code>=== Family History of the Sharma family ===
+The Sharma family comes from Gujarat.
+The parent studied B.Com and works as an accountant.
+The child enjoys cricket and drawing, and studies at Kendriya Vidyalaya.
+==========================================</code></pre>
+    <p class="muted">Your exact wording may differ, but every fact in the output must come from the object's attributes or methods.</p>
+  </section>
+
+  <!-- 6. Reference table -->
+  <section>
+    <h2>6. Quick Reference: What Each Class Has</h2>
+    <table>
+      <tr><th>Class</th><th>Own attributes</th><th>Own methods</th><th>Inherits from</th></tr>
+      <tr><td><code>Grandparent</code></td><td><code>surname</code>, <code>origin</code></td><td><code>family_origin()</code></td><td>nothing</td></tr>
+      <tr><td><code>Parent</code></td><td><code>education</code>, <code>job</code></td><td><code>profession()</code></td><td><code>Grandparent</code></td></tr>
+      <tr><td><code>Child</code></td><td><code>hobbies</code>, <code>school</code></td><td><code>current_school()</code>, <code>family_history()</code></td><td><code>Parent</code></td></tr>
+    </table>
+    <p class="muted" style="margin-top:12px">A Child object can use all six attributes and all four methods, even though some were defined in the parent classes.</p>
+  </section>
+
+  <!-- 7. Acceptance criteria -->
+  <section>
+    <h2>7. Acceptance Criteria</h2>
+    <p class="muted">Tick each item once you have checked it yourself. Your work is complete when all items are ticked.</p>
+    <div class="check"><input type="checkbox" id="a1"><label for="a1">The three classes are named exactly <code>Grandparent</code>, <code>Parent</code> and <code>Child</code>.</label></div>
+    <div class="check"><input type="checkbox" id="a2"><code>Parent</code> inherits from <code>Grandparent</code>, and <code>Child</code> inherits from <code>Parent</code>.</div>
+    <div class="check"><input type="checkbox" id="a3">Both <code>Parent</code> and <code>Child</code> call <code>super().__init__()</code> with the right arguments.</div>
+    <div class="check"><input type="checkbox" id="a4"><code>family_origin()</code> is written once, in <code>Grandparent</code>, and is not copied into the child classes.</div>
+    <div class="check"><input type="checkbox" id="a5"><code>profession()</code> and <code>current_school()</code> return sentences that use the object's own data, not fixed text.</div>
+    <div class="check"><input type="checkbox" id="a6">A single <code>Child</code> object can call <code>family_origin()</code>, <code>profession()</code> and <code>current_school()</code> without errors.</div>
+    <div class="check"><input type="checkbox" id="a7"><code>family_history()</code> prints information from all three generations, and reuses the existing methods.</div>
+    <div class="check"><input type="checkbox" id="a8">The program runs without errors and prints the family history for two different families.</div>
+    <div class="check"><input type="checkbox" id="a9">Every class and method has a short comment or docstring explaining what it does.</div>
+    <div class="check"><input type="checkbox" id="a10">You can explain in your own words what <code>super()</code> does and why we use it here.</div>
+  </section>
+
+  <!-- 8. Submission -->
+  <section>
+    <h2>8. What to Submit</h2>
+    <ol class="steps">
+      <li>Your Python file, named <code>family_tree.py</code>.</li>
+      <li>The output of the program for two different families.</li>
+      <li>A short answer (3 to 4 sentences) to this question: <em>"What would change if I added a Great-Grandparent class above Grandparent?"</em></li>
+    </ol>
+  </section>
+
+  <!-- 9. Hints -->
+  <section>
+    <h2>9. Hints If You Get Stuck</h2>
+    <p><strong>Error: <code>TypeError: __init__() missing 2 required positional arguments</code>.</strong> Check that <code>super().__init__()</code> passes every argument the parent expects.</p>
+    <p><strong>Error: <code>AttributeError: 'Child' object has no attribute 'surname'</code>.</strong> The Parent's <code>__init__</code> may not be calling <code>super().__init__()</code>, so the Grandparent's attributes were never set.</p>
+    <p><strong>Output looks wrong.</strong> Print the object's attributes one by one with <code>print(child.surname, child.origin)</code> to find the missing piece.</p>
+    <p class="muted">Ask a mentor after you have tried for at least 30 minutes, and bring your error message and what you expected to happen.</p>
+  </section>
+
+  <footer>Build the Grandparent first, test it, then add Parent, then Child.</footer>
+</div>
+
+<script>
+  const chain = {
+    1: 'Grandparent object has:\n  surname, origin\n  family_origin()',
+    2: 'Parent object has:\n  surname, origin      (inherited from Grandparent)\n  education, job       (its own)\n  family_origin()      (inherited)\n  profession()         (its own)',
+    3: 'Child object has:\n  surname, origin      (inherited from Grandparent)\n  education, job       (inherited from Parent)\n  hobbies, school      (its own)\n  family_origin(), profession()   (inherited)\n  current_school(), family_history()   (its own)'
+  };
+  function showGen(n) {
+    [1, 2, 3].forEach(i => document.getElementById('g' + i).classList.toggle('sel', i === n));
+    document.getElementById('chainOut').textContent = chain[n];
+  }
+  showGen(1);
+</script>
+</body>
+</html>

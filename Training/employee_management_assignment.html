@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assignment: Employee Management System</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --green: #22c55e;
+    --yellow: #facc15;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+  header { text-align: center; padding: 32px 0 12px; }
+  header h1 { margin: 0 0 8px; font-size: 2rem; color: var(--accent); }
+  header p { color: var(--muted); margin: 0; }
+  section { background: var(--card); border-radius: 14px; padding: 22px; margin: 20px 0; }
+  h2 { margin: 0 0 12px; font-size: 1.4rem; }
+  h3 { margin: 6px 0 8px; font-size: 1.1rem; color: var(--accent); }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); }
+  .tag {
+    display: inline-block; background: #0f172a; border: 1px solid #334155;
+    padding: 3px 10px; border-radius: 999px; font-size: 0.85rem; margin: 3px 4px 3px 0;
+  }
+  pre {
+    background: #020617; border-radius: 10px; padding: 14px; overflow-x: auto;
+    font-size: 0.9rem; line-height: 1.5; border: 1px solid #334155;
+  }
+  code { font-family: Consolas, "Courier New", monospace; }
+  .problem { border-left: 4px solid var(--yellow); background: #0f172a; border-radius: 12px; padding: 16px; }
+  .goal { border-left: 4px solid var(--green); background: #0f172a; border-radius: 12px; padding: 16px; margin-top: 12px; }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; position: relative; padding: 8px 0 8px 44px; }
+  .steps li::before {
+    content: counter(step); position: absolute; left: 0; top: 6px;
+    width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #0f172a;
+    font-weight: bold; display: flex; align-items: center; justify-content: center;
+  }
+  .check { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
+  .check input { margin-top: 6px; width: 18px; height: 18px; accent-color: var(--green); }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #334155; vertical-align: top; }
+  th { color: var(--accent); }
+  .demo { background: #0f172a; border-radius: 12px; padding: 16px; margin-top: 12px; }
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 8px 0; }
+  .kind-btn {
+    background: #334155; color: var(--text); border: 2px solid transparent; padding: 9px 14px;
+    border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.95rem;
+  }
+  .kind-btn.sel { border-color: var(--green); background: #052e16; }
+  .out {
+    margin-top: 10px; padding: 12px; background: #020617; border-radius: 10px;
+    font-family: Consolas, monospace; white-space: pre-wrap; font-size: 0.92rem; min-height: 44px;
+  }
+  .note { color: var(--yellow); font-size: 0.92rem; }
+  footer { text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Assignment: Employee Management System</h1>
+    <p>Class, Static and Instance Methods in Python &middot; Level: Junior &middot; Estimated time: 2 hours</p>
+  </header>
+
+  <!-- 1. Problem statement -->
+  <section>
+    <h2>1. Problem Statement</h2>
+    <div class="problem">
+      <p>A small company wants a simple program to keep track of its employees. Every employee has an <strong>ID</strong>, a <strong>name</strong> and a <strong>salary</strong>. The program must be able to:</p>
+      <ul>
+        <li><strong>Add a new employee</strong> to a shared list, giving each one a unique ID. <span class="tag">Class method</span></li>
+        <li><strong>Calculate the average salary</strong> of all employees, without creating an employee object first. <span class="tag">Static method</span></li>
+        <li><strong>Show one employee's details</strong> on screen. <span class="tag">Instance method</span></li>
+      </ul>
+      <p>Your job is to write one class called <code>Employee</code> that does all three jobs.</p>
+    </div>
+    <div class="goal">
+      <p><strong>Goal:</strong> By the end, you should understand which kind of method to choose for a job, and why the first parameter (<code>self</code>, <code>cls</code>, or nothing) matters.</p>
+    </div>
+    <p class="muted" style="margin-top:12px">Topics covered: <span class="tag">Classes</span><span class="tag">Objects</span><span class="tag">Class attributes</span><span class="tag">@classmethod</span><span class="tag">@staticmethod</span><span class="tag">Instance methods</span></p>
+  </section>
+
+  <!-- 2. Interactive: which method type -->
+  <section>
+    <h2>2. Understand the Three Method Types</h2>
+    <p class="muted">Click each type to see what it receives and how it is called.</p>
+    <div class="row">
+      <button class="kind-btn sel" data-k="cls">@classmethod</button>
+      <button class="kind-btn" data-k="sta">@staticmethod</button>
+      <button class="kind-btn" data-k="ins">Instance method</button>
+    </div>
+    <div class="demo">
+      <div class="out" id="kindOut"></div>
+    </div>
+  </section>
+
+  <!-- 3. Task -->
+  <section>
+    <h2>3. Your Task</h2>
+    <ol class="steps">
+      <li><strong>Create the class.</strong> Write a class called <code>Employee</code>. Inside it, create a class-level list called <code>employees</code> that starts empty, and a class-level counter called <code>next_id</code> that starts at 1.</li>
+      <li><strong>Class method: add an employee.</strong> Write <code>add_employee(cls, name, salary)</code> with the <code>@classmethod</code> decorator. It must give the new employee the next unique ID, increase the counter, create an <code>Employee</code> object, add it to <code>cls.employees</code>, and return it.</li>
+      <li><strong>Static method: average salary.</strong> Write <code>average_salary()</code> with the <code>@staticmethod</code> decorator. It must return the average salary of all employees in <code>Employee.employees</code>. If there are no employees, it should return <code>0</code> instead of crashing.</li>
+      <li><strong>Instance method: display details.</strong> Write <code>display_details(self)</code>. It must print the employee's ID, name and salary on one line.</li>
+      <li><strong>Test it.</strong> Add at least three employees, print the average salary, and display the details of each employee.</li>
+    </ol>
+  </section>
+
+  <!-- 4. Starter skeleton -->
+  <section>
+    <h2>4. Starter Code (Fill In the Blanks)</h2>
+    <p class="muted">Complete every part marked <code># TODO</code>. Keep the names exactly as written, because they are checked in the acceptance criteria.</p>
+    <pre><code>class Employee:
+    employees = []          # TODO: shared list for ALL employees (class attribute)
+    next_id = 1             # TODO: is this the right starting value?
+
+    def __init__(self, emp_id, name, salary):
+        self.emp_id = emp_id
+        self.name = name
+        self.salary = salary
+
+    @classmethod
+    def add_employee(cls, name, salary):
+        # TODO: create a new Employee with the next unique ID
+        # TODO: increase the counter
+        # TODO: add the new employee to cls.employees
+        # TODO: return the new employee
+        pass
+
+    @staticmethod
+    def average_salary():
+        # TODO: if there are no employees, return 0
+        # TODO: otherwise return the average of all salaries in Employee.employees
+        pass
+
+    def display_details(self):
+        # TODO: print ID, name and salary on one line
+        pass
+
+
+# TODO: add three employees, print the average salary, and display each one</code></pre>
+  </section>
+
+  <!-- 5. Expected output -->
+  <section>
+    <h2>5. Expected Output</h2>
+    <p>For the following test code:</p>
+    <pre><code>Employee.add_employee("Riya", 50000)
+Employee.add_employee("Arjun", 70000)
+Employee.add_employee("Meera", 60000)
+print("Average salary:", Employee.average_salary())
+for e in Employee.employees:
+    e.display_details()</code></pre>
+    <p>The output should be:</p>
+    <pre><code>Average salary: 60000.0
+ID: 1 | Name: Riya | Salary: 50000
+ID: 2 | Name: Arjun | Salary: 70000
+ID: 3 | Name: Meera | Salary: 60000</code></pre>
+    <p class="muted">The layout of the display line can differ, but the ID, name and salary must all appear.</p>
+  </section>
+
+  <!-- 6. Reference table -->
+  <section>
+    <h2>6. Quick Reference: Which Method Type?</h2>
+    <table>
+      <tr><th>Method type</th><th>First parameter</th><th>Can use the object's own data?</th><th>Can use class data?</th><th>How it is called</th></tr>
+      <tr><td>Instance method</td><td><code>self</code></td><td>Yes</td><td>Yes</td><td><code>emp.display_details()</code></td></tr>
+      <tr><td>Class method</td><td><code>cls</code></td><td>No</td><td>Yes</td><td><code>Employee.add_employee(...)</code></td></tr>
+      <tr><td>Static method</td><td>none</td><td>No</td><td>No (only by name)</td><td><code>Employee.average_salary()</code></td></tr>
+    </table>
+    <p class="note" style="margin-top:12px">Rule of thumb: use a class method when you need the class (to create objects or change class data), a static method when the code needs neither, and an instance method when it needs one specific object.</p>
+  </section>
+
+  <!-- 7. Acceptance criteria -->
+  <section>
+    <h2>7. Acceptance Criteria</h2>
+    <p class="muted">Tick each item once you have checked it yourself. Your work is complete when all items are ticked.</p>
+    <div class="check"><input type="checkbox" id="a1"><label for="a1">The class is named exactly <code>Employee</code>, and <code>employees</code> is a class attribute (not set inside <code>__init__</code>).</label></div>
+    <div class="check"><input type="checkbox" id="a2"><label for="a2"><code>add_employee</code> is decorated with <code>@classmethod</code> and uses <code>cls</code>, not <code>self</code>.</label></div>
+    <div class="check"><input type="checkbox" id="a3">Every employee gets a different ID (1, 2, 3, ...), even when employees are added one after another.</div>
+    <div class="check"><input type="checkbox" id="a4">Each new employee is added to the shared list, so <code>Employee.employees</code> contains all of them.</div>
+    <div class="check"><input type="checkbox" id="a5"><code>average_salary</code> is decorated with <code>@staticmethod</code>, takes no <code>self</code> or <code>cls</code>, and works when called as <code>Employee.average_salary()</code>.</div>
+    <div class="check"><input type="checkbox" id="a6"><code>average_salary()</code> returns <code>0</code> and does not crash when there are no employees.</div>
+    <div class="check"><input type="checkbox" id="a7"><code>display_details</code> is a normal instance method and prints the ID, name and salary of one employee.</div>
+    <div class="check"><input type="checkbox" id="a8">The program runs without errors and matches the expected output in Section 5.</div>
+    <div class="check"><input type="checkbox" id="a9">Each method has a short comment or docstring that says what it does and why it uses that method type.</div>
+    <div class="check"><input type="checkbox" id="a10">You can explain in your own words why <code>add_employee</code> must be a class method and not an instance method.</div>
+  </section>
+
+  <!-- 8. Submission -->
+  <section>
+    <h2>8. What to Submit</h2>
+    <ol class="steps">
+      <li>Your Python file, named <code>employee_management.py</code>.</li>
+      <li>The output of the program when run with the test code in Section 5.</li>
+      <li>A short answer (3 to 4 sentences) to this question: <em>"What would go wrong if <code>average_salary</code> were an instance method, and why?"</em></li>
+    </ol>
+  </section>
+
+  <!-- 9. Hints -->
+  <section>
+    <h2>9. Hints If You Get Stuck</h2>
+    <p><strong>Two employees get the same ID.</strong> Check that <code>next_id</code> is a class attribute and that you write to it through <code>cls.next_id</code> (or <code>Employee.next_id</code>). If it is set inside <code>__init__</code>, each object gets its own copy.</p>
+    <p><strong>Error: <code>NameError: name 'self' is not defined</code> inside a class method.</strong> Class methods receive <code>cls</code>, not <code>self</code>. Rename the parameter and use <code>cls</code> inside the method.</p>
+    <p><strong>Error: <code>ZeroDivisionError</code> in <code>average_salary</code>.</strong> You are dividing by the number of employees when the list is empty. Check the length first and return 0.</p>
+    <p><strong>Error: <code>TypeError: average_salary() takes 0 positional arguments but 1 was given</code>.</strong> Check that the static method has no <code>self</code> parameter and that you call it on the class, not on an object.</p>
+    <p class="muted">Ask a mentor after you have tried for at least 30 minutes. Bring your code, the error message, and what you expected to happen.</p>
+  </section>
+
+  <footer>Write the class attributes first, then the class method, then the static method, then the instance method. Test each one before moving on.</footer>
+</div>
+
+<script>
+  const info = {
+    cls: 'CLASS METHOD  @classmethod  (first parameter: cls)\n\n' +
+         'Receives: the class itself (Employee).\n' +
+         'Use it for: creating objects in a controlled way, or changing class data.\n\n' +
+         'def add_employee(cls, name, salary):\n' +
+         '    cls.next_id += 1\n\n' +
+         'Called as: Employee.add_employee("Riya", 50000)',
+    sta: 'STATIC METHOD  @staticmethod  (no self, no cls)\n\n' +
+         'Receives: nothing extra. It is just a function stored inside the class.\n' +
+         'Use it for: a calculation that belongs to the topic but does not need any object or the class.\n\n' +
+         '@staticmethod\ndef average_salary():\n' +
+         '    ...   # uses Employee.employees by name\n\n' +
+         'Called as: Employee.average_salary()   (no object needed)',
+    ins: 'INSTANCE METHOD  (first parameter: self)\n\n' +
+         'Receives: the one specific object it is called on.\n' +
+         'Use it for: anything about one employee, such as showing their details.\n\n' +
+         'def display_details(self):\n' +
+         '    print(self.emp_id, self.name, self.salary)\n\n' +
+         'Called as: riya.display_details()'
+  };
+  document.querySelectorAll('.kind-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.kind-btn').forEach(b => b.classList.toggle('sel', b === btn));
+      document.getElementById('kindOut').textContent = info[btn.dataset.k];
+    });
+  });
+  document.getElementById('kindOut').textContent = info.cls;
+</script>
+</body>
+</html>

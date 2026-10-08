@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project: Website Health Checker</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --green: #22c55e;
+    --yellow: #facc15;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+  header { text-align: center; padding: 32px 0 12px; }
+  header h1 { margin: 0 0 8px; font-size: 2rem; color: var(--accent); }
+  header p { color: var(--muted); margin: 0; }
+  section { background: var(--card); border-radius: 14px; padding: 22px; margin: 20px 0; }
+  h2 { margin: 0 0 12px; font-size: 1.4rem; }
+  h3 { margin: 6px 0 8px; font-size: 1.1rem; color: var(--accent); }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); }
+  .tag {
+    display: inline-block; background: #0f172a; border: 1px solid #334155;
+    padding: 3px 10px; border-radius: 999px; font-size: 0.85rem; margin: 3px 4px 3px 0;
+  }
+  pre {
+    background: #020617; border-radius: 10px; padding: 14px; overflow-x: auto;
+    font-size: 0.9rem; line-height: 1.5; border: 1px solid #334155;
+  }
+  code { font-family: Consolas, "Courier New", monospace; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .topic { background: #0f172a; border-radius: 12px; padding: 16px; border-left: 4px solid var(--accent); }
+  .topic.c2 { border-left-color: var(--purple); }
+  .topic.c3 { border-left-color: var(--green); }
+  .topic h3 { margin-top: 0; }
+  .demo { background: #0f172a; border-radius: 12px; padding: 16px; margin-top: 12px; }
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 8px 0; }
+  select {
+    padding: 8px; border-radius: 8px; background: #1e293b; color: var(--text);
+    border: 1px solid #334155;
+  }
+  .out {
+    margin-top: 10px; padding: 12px; background: #020617; border-radius: 10px;
+    font-family: Consolas, monospace; white-space: pre-wrap; font-size: 0.92rem; min-height: 44px;
+  }
+  .ok { color: var(--green); }
+  .bad { color: var(--red); }
+  .warn { color: var(--yellow); }
+  button {
+    background: var(--accent); color: #0f172a; border: none; padding: 9px 16px;
+    border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.95rem;
+  }
+  button:hover { filter: brightness(1.1); }
+  button:disabled { opacity: 0.5; cursor: default; }
+  button.secondary { background: #334155; color: var(--text); }
+  /* Progress bars */
+  .site { display: grid; grid-template-columns: 130px 1fr 90px; gap: 10px; align-items: center; margin: 8px 0; font-size: 0.92rem; }
+  .bar { height: 14px; background: #1e293b; border-radius: 999px; overflow: hidden; border: 1px solid #334155; }
+  .fill { height: 100%; width: 0%; background: var(--accent); border-radius: 999px; }
+  .fill.done { background: var(--green); }
+  /* Timeline */
+  .timeline { margin-top: 10px; }
+  .tl-row { display: grid; grid-template-columns: 150px 1fr 80px; gap: 10px; align-items: center; margin: 6px 0; font-size: 0.92rem; }
+  .tl-bar { height: 18px; border-radius: 6px; background: var(--purple); transition: width 0.4s; }
+  .tl-bar.seq { background: var(--red); }
+  .tl-bar.async { background: var(--accent); }
+  .tl-bar.thr { background: var(--green); }
+  .tl-bar.proc { background: var(--orange); }
+  /* Choice cards */
+  .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+  .choices button { width: 100%; text-align: left; }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; position: relative; padding: 8px 0 8px 44px; }
+  .steps li::before {
+    content: counter(step); position: absolute; left: 0; top: 6px;
+    width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #0f172a;
+    font-weight: bold; display: flex; align-items: center; justify-content: center;
+  }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #334155; vertical-align: top; }
+  th { color: var(--accent); }
+  .check { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
+  .check input { margin-top: 6px; width: 18px; height: 18px; accent-color: var(--green); }
+  footer { text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Website Health Checker</h1>
+    <p>A visual guide to Asyncio, Threading and Multiprocessing</p>
+  </header>
+
+  <!-- 1. Problem -->
+  <section>
+    <h2>1. The Problem</h2>
+    <p>A team looks after 20 websites. Every hour, the program must:</p>
+    <ul>
+      <li><strong>Ping 20 websites</strong> and report which are up. Most of the time is spent <em>waiting</em> for replies. <span class="tag">Asyncio</span></li>
+      <li><strong>Download 10 screenshots</strong> from a server. Also mostly waiting for the network. <span class="tag">Threading</span></li>
+      <li><strong>Resize and compress 8 large images</strong>. This is heavy calculation that keeps the processor busy. <span class="tag">Multiprocessing</span></li>
+    </ul>
+    <p class="muted">The key question is: <em>is my program waiting, or is it working?</em> The answer decides which tool to use.</p>
+  </section>
+
+  <!-- 2. Concepts -->
+  <section>
+    <h2>2. The Three Tools</h2>
+    <div class="grid">
+      <div class="topic">
+        <h3>Asyncio</h3>
+        <p><strong>Idea:</strong> One program switches between many tasks at each <code>await</code>. While one task waits for the network, the others keep going.</p>
+        <p class="muted">Real life: a waiter who takes orders from many tables and checks the kitchen between tables, rather than waiting at one table.</p>
+        <pre><code>import asyncio
+
+async def check(url):
+    await asyncio.sleep(1)     # pretend network wait
+    return f"{url} is up"
+
+async def main():
+    urls = ["a.com", "b.com", "c.com"]
+    results = await asyncio.gather(*(check(u) for u in urls))
+    print(results)
+
+asyncio.run(main())</code></pre>
+      </div>
+      <div class="topic c2">
+        <h3>Threading</h3>
+        <p><strong>Idea:</strong> Several workers run inside the same program at the same time. Good when each worker is mostly waiting.</p>
+        <p class="muted">Real life: several cashiers in one shop, each serving a different customer.</p>
+        <pre><code>import threading
+
+def download(url):
+    print("downloading", url)
+
+threads = [threading.Thread(target=download, args=(u,))
+           for u in ["img1.png", "img2.png"]]
+for t in threads: t.start()     # start all workers
+for t in threads: t.join()      # wait for all to finish</code></pre>
+      </div>
+      <div class="topic c3">
+        <h3>Multiprocessing</h3>
+        <p><strong>Idea:</strong> Separate programs run on separate processor cores. Best for heavy calculation.</p>
+        <p class="muted">Real life: several chefs in separate kitchens, each cooking a big meal at the same time.</p>
+        <pre><code>from multiprocessing import Pool
+
+def compress(image):
+    ...                       # heavy CPU work
+
+if __name__ == "__main__":
+    with Pool(4) as pool:     # 4 processes
+        pool.map(compress, images)</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Choice helper -->
+  <section>
+    <h2>3. Which Tool Should I Use?</h2>
+    <p class="muted">Pick what the task mostly does. The guide suggests a tool.</p>
+    <div class="choices">
+      <button class="secondary" data-kind="net">Waiting for the network (many websites)</button>
+      <button class="secondary" data-kind="disk">Waiting for files or downloads</button>
+      <button class="secondary" data-kind="cpu">Heavy calculation (images, big maths)</button>
+    </div>
+    <div class="out" id="choiceOut">Choose a task type above.</div>
+  </section>
+
+  <!-- 4. Interactive: concurrent progress -->
+  <section>
+    <h2>4. Try It: Ping 5 Sites Concurrently vs One by One</h2>
+    <p class="muted">Each bar is one website check that takes a random time. Run them one after another, or all at the same time like <code>asyncio.gather()</code>.</p>
+    <div class="demo">
+      <div class="row">
+        <button id="runSeq" class="secondary">Run one by one</button>
+        <button id="runConc">Run all at once</button>
+        <span id="timer" class="muted">Time: 0.0s</span>
+      </div>
+      <div id="sites"></div>
+    </div>
+  </section>
+
+  <!-- 5. Interactive: timeline comparison -->
+  <section>
+    <h2>5. Try It: Which Tool Finishes First?</h2>
+    <p class="muted">Pick a task type. The bars show the rough time each approach takes for 8 jobs. Shorter is faster.</p>
+    <div class="demo">
+      <div class="row">
+        <select id="tlKind">
+          <option value="io">Waiting jobs (8 website checks)</option>
+          <option value="cpu">Heavy calculation jobs (8 image resizes)</option>
+        </select>
+        <button id="tlBtn">Compare</button>
+      </div>
+      <div class="timeline" id="timeline"></div>
+      <div class="out" id="tlOut">Press Compare to see the bars.</div>
+    </div>
+  </section>
+
+  <!-- 6. Code -->
+  <section>
+    <h2>6. The Core Code (Read It Slowly)</h2>
+    <pre><code>import asyncio, threading
+from multiprocessing import Pool
+
+# ----- 1. ASYNCIO: many network checks, one program -----
+async def check_site(url):
+    await asyncio.sleep(1)                  # wait for the reply
+    return url, "UP"
+
+async def check_all(urls):
+    return await asyncio.gather(*(check_site(u) for u in urls))
+
+# ----- 2. THREADING: many downloads, workers wait for files -----
+def download(name, results):
+    # pretend to download a file
+    results.append(name)
+
+def download_all(names):
+    results = []
+    threads = [threading.Thread(target=download, args=(n, results)) for n in names]
+    for t in threads: t.start()
+    for t in threads: t.join()
+    return results
+
+# ----- 3. MULTIPROCESSING: heavy work on several cores -----
+def resize(image):
+    return sum(i * i for i in range(10_000_000))   # heavy CPU work
+
+if __name__ == "__main__":
+    print(asyncio.run(check_all(["a.com", "b.com", "c.com"])))
+    print(download_all(["img1.png", "img2.png"]))
+    with Pool(4) as pool:
+        pool.map(resize, ["p1", "p2", "p3", "p4"])</code></pre>
+    <p class="muted">Rule of thumb: <code>asyncio</code> and <code>threading</code> help when a program <em>waits</em>. <code>multiprocessing</code> helps when a program <em>calculates</em>. The <code>if __name__ == "__main__"</code> line is needed for multiprocessing.</p>
+  </section>
+
+  <!-- 7. Task -->
+  <section>
+    <h2>7. Your Task</h2>
+    <ol class="steps">
+      <li>Write an <code>async</code> function <code>check_site(url)</code> that waits 1 second with <code>asyncio.sleep</code> and returns the URL and its status.</li>
+      <li>Use <code>asyncio.gather()</code> to check 20 sites concurrently, then time how long the whole run takes.</li>
+      <li>Write a function <code>download(name)</code> that simulates a 1-second download. Start 10 downloads with <code>threading.Thread</code> and wait for all of them with <code>join()</code>.</li>
+      <li>Write a CPU-heavy function <code>resize(image)</code>. Run it on 8 images using <code>multiprocessing.Pool</code>.</li>
+      <li>Time each part with <code>time.perf_counter()</code> and compare it with running the same work one after another.</li>
+      <li>Write a short comment above each part explaining whether the work is waiting or calculating, and which tool you chose and why.</li>
+    </ol>
+  </section>
+
+  <!-- 8. Acceptance -->
+  <section>
+    <h2>8. Acceptance Criteria (Tick As You Go)</h2>
+    <div class="check"><input type="checkbox" id="a1"><label for="a1">The 20 site checks run concurrently, and the total time is close to one check, not twenty.</label></div>
+    <div class="check"><input type="checkbox" id="a2">Each site check returns both its URL and its status, and all results are collected.</div>
+    <div class="check"><input type="checkbox" id="a3">The 10 threaded downloads all start before any is joined, and all finish.</div>
+    <div class="check"><input type="checkbox" id="a4">The heavy <code>resize()</code> work runs with <code>multiprocessing.Pool</code> inside an <code>if __name__ == "__main__":</code> block.</div>
+    <div class="check"><input type="checkbox" id="a5">Timings are recorded for sequential and concurrent runs, and the program prints both.</div>
+    <div class="check"><input type="checkbox" id="a6">Each part has a comment that says "waiting" or "calculating" and explains the tool chosen.</div>
+    <div class="check"><input type="checkbox" id="a7">The program runs without errors and produces the same results on two separate runs.</div>
+    <div class="check"><input type="checkbox" id="a8">You can explain in your own words why asyncio is not the right choice for heavy calculation.</div>
+  </section>
+
+  <!-- 9. Self-check -->
+  <section>
+    <h2>9. Self-Check Questions</h2>
+    <p>1. What does <code>await</code> tell asyncio to do while a task waits?</p>
+    <p>2. Why does <code>multiprocessing</code> help heavy calculations more than threading does?</p>
+    <p>3. Why do we call <code>join()</code> on every thread?</p>
+    <p>4. Why must multiprocessing code sit inside <code>if __name__ == "__main__":</code>?</p>
+  </section>
+
+  <footer>Measure before you optimise: time the sequential version first, then compare.</footer>
+</div>
+
+<script>
+  // NOTE: Browser JavaScript is a simulation. Real Python timings depend on the machine.
+  // The demos show the idea: waiting tasks overlap, calculation tasks compete for cores.
+
+  // 3. Tool chooser
+  const advice = {
+    net: 'Waiting for the network → asyncio (or threading). Many waits can overlap in one program.',
+    disk: 'Waiting for files or downloads → threading or asyncio. The program is idle until the file arrives.',
+    cpu: 'Heavy calculation → multiprocessing. Separate processes can use separate cores at the same time.'
+  };
+  document.querySelectorAll('[data-kind]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('choiceOut').textContent = advice[btn.dataset.kind];
+    });
+  });
+
+  // 4. Concurrent vs sequential progress bars
+  const siteNames = ['google.com', 'github.com', 'bbc.co.uk', 'example.org', 'wikipedia.org'];
+  const durations = siteNames.map(() => 1000 + Math.floor(Math.random() * 1500)); // 1.0s to 2.5s
+  const sitesEl = document.getElementById('sites');
+  const timer = document.getElementById('timer');
+  const runSeq = document.getElementById('runSeq');
+  const runConc = document.getElementById('runConc');
+  let startTime = 0;
+  let ticker = null;
+
+  function buildRows() {
+    sitesEl.innerHTML = siteNames.map((n, i) =>
+      `<div class="site"><span>${n}</span>` +
+      `<div class="bar"><div class="fill" id="f${i}"></div></div>` +
+      `<span id="t${i}" class="muted">waiting</span></div>`).join('');
+  }
+  function animate(i, ms) {
+    return new Promise(resolve => {
+      const fill = document.getElementById('f' + i);
+      const label = document.getElementById('t' + i);
+      const began = performance.now();
+      fill.style.transition = `width ${ms}ms linear`;
+      requestAnimationFrame(() => { fill.style.width = '100%'; });
+      label.textContent = 'checking...';
+      setTimeout(() => {
+        fill.classList.add('done');
+        label.textContent = 'UP';
+        label.className = 'ok';
+        resolve();
+      }, ms);
+    });
+  }
+  function startTimer() {
+    startTime = performance.now();
+    clearInterval(ticker);
+    ticker = setInterval(() => {
+      timer.textContent = `Time: ${((performance.now() - startTime) / 1000).toFixed(1)}s`;
+    }, 100);
+  }
+  function stopTimer() {
+    clearInterval(ticker);
+    timer.textContent = `Time: ${((performance.now() - startTime) / 1000).toFixed(1)}s`;
+  }
+  function setButtons(disabled) { runSeq.disabled = disabled; runConc.disabled = disabled; }
+
+  runSeq.addEventListener('click', async () => {
+    buildRows();
+    setButtons(true);
+    startTimer();
+    for (let i = 0; i < siteNames.length; i++) {
+      await animate(i, durations[i]);      // one after another
+    }
+    stopTimer();
+    setButtons(false);
+  });
+  runConc.addEventListener('click', async () => {
+    buildRows();
+    setButtons(true);
+    startTimer();
+    await Promise.all(siteNames.map((_, i) => animate(i, durations[i])));  // all at once
+    stopTimer();
+    setButtons(false);
+  });
+  buildRows();
+
+  // 5. Timeline comparison (illustrative numbers for 8 jobs, 1 unit = 1 second of work)
+  const timelineEl = document.getElementById('timeline');
+  const tlOut = document.getElementById('tlOut');
+  function drawBars(rows) {
+    const max = Math.max(...rows.map(r => r.value));
+    timelineEl.innerHTML = rows.map(r =>
+      `<div class="tl-row"><span>${r.label}</span>` +
+      `<div><div class="tl-bar ${r.cls}" style="width:${(r.value / max) * 100}%"></div></div>` +
+      `<span>${r.value}s</span></div>`).join('');
+  }
+  document.getElementById('tlBtn').addEventListener('click', () => {
+    const kind = document.getElementById('tlKind').value;
+    if (kind === 'io') {
+      // 8 jobs, each waiting 1s. Cores barely matter because the program is waiting.
+      drawBars([
+        { label: 'One by one', value: 8, cls: 'seq' },
+        { label: 'asyncio', value: 1, cls: 'async' },
+        { label: 'threading', value: 1, cls: 'thr' },
+        { label: 'multiprocessing', value: 2, cls: 'proc' }
+      ]);
+      tlOut.textContent =
+        'Waiting jobs: asyncio and threading overlap the waits, so 8 jobs take about 1 second.\n' +
+        'Processes also overlap waits, but starting them costs extra time, so they are slower here.';
+    } else {
+      // 8 jobs, each needing 1s of CPU. Threads share one core in CPython; processes use several.
+      drawBars([
+        { label: 'One by one', value: 8, cls: 'seq' },
+        { label: 'asyncio', value: 8, cls: 'async' },
+        { label: 'threading', value: 8, cls: 'thr' },
+        { label: 'multiprocessing (4 cores)', value: 2, cls: 'proc' }
+      ]);
+      tlOut.textContent =
+        'Heavy calculation: asyncio and threading still take about 8 seconds, because the work runs on one core.\n' +
+        'Multiprocessing with 4 cores takes about 2 seconds, because 4 jobs run at the same time.';
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project: Daily Expense Logger</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --green: #22c55e;
+    --yellow: #facc15;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+  header { text-align: center; padding: 32px 0 12px; }
+  header h1 { margin: 0 0 8px; font-size: 2rem; color: var(--accent); }
+  header p { color: var(--muted); margin: 0; }
+  section { background: var(--card); border-radius: 14px; padding: 22px; margin: 20px 0; }
+  h2 { margin: 0 0 12px; font-size: 1.4rem; }
+  h3 { margin: 6px 0 8px; font-size: 1.1rem; color: var(--accent); }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); }
+  .tag {
+    display: inline-block; background: #0f172a; border: 1px solid #334155;
+    padding: 3px 10px; border-radius: 999px; font-size: 0.85rem; margin: 3px 4px 3px 0;
+  }
+  pre {
+    background: #020617; border-radius: 10px; padding: 14px; overflow-x: auto;
+    font-size: 0.9rem; line-height: 1.5; border: 1px solid #334155;
+  }
+  code { font-family: Consolas, "Courier New", monospace; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .topic { background: #0f172a; border-radius: 12px; padding: 16px; border-left: 4px solid var(--accent); }
+  .topic.c2 { border-left-color: var(--orange); }
+  .topic h3 { margin-top: 0; }
+  .demo { background: #0f172a; border-radius: 12px; padding: 16px; margin-top: 12px; }
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 8px 0; }
+  input[type=text], select {
+    padding: 8px; border-radius: 8px; background: #1e293b; color: var(--text);
+    border: 1px solid #334155; min-width: 140px;
+  }
+  .out {
+    margin-top: 10px; padding: 12px; background: #020617; border-radius: 10px;
+    font-family: Consolas, monospace; white-space: pre-wrap; font-size: 0.92rem; min-height: 44px;
+  }
+  .file {
+    background: #fefce8; color: #111827; font-family: Consolas, monospace; font-size: 0.92rem;
+    padding: 12px; border-radius: 8px; white-space: pre; min-height: 60px; margin-top: 10px;
+  }
+  .ok { color: var(--green); }
+  .bad { color: var(--red); }
+  .warn { color: var(--yellow); }
+  button {
+    background: var(--accent); color: #0f172a; border: none; padding: 9px 16px;
+    border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.95rem;
+  }
+  button:hover { filter: brightness(1.1); }
+  button.secondary { background: #334155; color: var(--text); }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #334155; vertical-align: top; }
+  th { color: var(--accent); }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; position: relative; padding: 8px 0 8px 44px; }
+  .steps li::before {
+    content: counter(step); position: absolute; left: 0; top: 6px;
+    width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #0f172a;
+    font-weight: bold; display: flex; align-items: center; justify-content: center;
+  }
+  .check { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
+  .check input { margin-top: 6px; width: 18px; height: 18px; accent-color: var(--green); }
+  footer { text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Daily Expense Logger</h1>
+    <p>A visual guide to File Read and Write, and Exception Handling during I/O</p>
+  </header>
+
+  <!-- 1. Problem -->
+  <section>
+    <h2>1. The Problem</h2>
+    <p>You want a small program that keeps a record of your daily spending, even after the program closes. It must:</p>
+    <ul>
+      <li><strong>Save each expense</strong> to a text file, adding it to the end without losing old ones. <span class="tag">Write / Append</span></li>
+      <li><strong>Read the file back</strong> and total the money spent. <span class="tag">Read</span></li>
+      <li><strong>Survive real problems</strong>: the file may not exist yet, a line may be damaged, or the file may be locked. <span class="tag">Exception handling</span></li>
+    </ul>
+    <p class="muted">Almost every real program saves data to files. Files fail for many reasons, so good code expects that.</p>
+  </section>
+
+  <!-- 2. Concepts -->
+  <section>
+    <h2>2. The Three Ideas</h2>
+    <div class="grid">
+      <div class="topic">
+        <h3>Reading and Writing Files</h3>
+        <p><strong>Idea:</strong> <code>open()</code> connects your program to a file. The <em>mode</em> decides what you may do.</p>
+        <table>
+          <tr><th>Mode</th><th>Meaning</th></tr>
+          <tr><td><code>"r"</code></td><td>Read only (file must exist)</td></tr>
+          <tr><td><code>"w"</code></td><td>Write, <strong>erases</strong> old content</td></tr>
+          <tr><td><code>"a"</code></td><td>Append, adds to the end</td></tr>
+        </table>
+      </div>
+      <div class="topic c2">
+        <h3>Exception Handling</h3>
+        <p><strong>Idea:</strong> <code>try</code> runs risky code. <code>except</code> catches a named error and responds calmly instead of crashing.</p>
+        <p class="muted">Real life: a bank teller who has a plan when the card reader fails.</p>
+        <pre><code>try:
+    with open("expenses.txt", "r") as f:
+        data = f.read()
+except FileNotFoundError:
+    data = ""          # no file yet: start empty</code></pre>
+      </div>
+    </div>
+    <div class="topic" style="margin-top:14px">
+      <h3>The <code>with</code> statement</h3>
+      <p><strong>Idea:</strong> <code>with open(...) as f:</code> closes the file automatically, even if an error happens inside the block. Always prefer it.</p>
+      <pre><code>with open("expenses.txt", "a") as f:
+    f.write("Tea,20\n")
+# the file is closed here automatically</code></pre>
+    </div>
+  </section>
+
+  <!-- 3. Interactive: write vs append -->
+  <section>
+    <h2>3. Try It: Write vs Append</h2>
+    <p class="muted">The box below is a file. Add an expense using <code>"a"</code> (append) or <code>"w"</code> (write), and watch what happens to the old content.</p>
+    <div class="demo">
+      <div class="row">
+        <select id="wFile">
+          <option value="expenses.txt">expenses.txt</option>
+          <option value="new.txt">new.txt (does not exist yet)</option>
+        </select>
+        <select id="wMode">
+          <option value="a">"a" (append)</option>
+          <option value="w">"w" (write)</option>
+        </select>
+      </div>
+      <div class="row">
+        <input type="text" id="wItem" value="Lunch,120">
+        <button id="wBtn">f.write(line)</button>
+        <button id="wReset" class="secondary">Reset files</button>
+      </div>
+      <div class="out" id="wOut">Choose a file and mode, then write a line.</div>
+      <div class="file" id="wContent"></div>
+    </div>
+  </section>
+
+  <!-- 4. Interactive: read and total with exception handling -->
+  <section>
+    <h2>4. Try It: Read the File and Total It</h2>
+    <p class="muted">Pick a file and press the button. The program reads each line, skips bad lines, and handles errors instead of crashing.</p>
+    <div class="demo">
+      <div class="row">
+        <select id="rFile">
+          <option value="expenses.txt">expenses.txt (good)</option>
+          <option value="bad.txt">bad.txt (has a damaged line)</option>
+          <option value="missing.txt">missing.txt (does not exist)</option>
+          <option value="locked.txt">locked.txt (permission denied)</option>
+        </select>
+        <button id="rBtn">Read and total</button>
+      </div>
+      <div class="out" id="rOut">Press the button to read a file.</div>
+    </div>
+  </section>
+
+  <!-- 5. Error types table -->
+  <section>
+    <h2>5. Which Error Means What?</h2>
+    <table>
+      <tr><th>Error</th><th>When it happens</th><th>Sensible response</th></tr>
+      <tr><td><code>FileNotFoundError</code></td><td>Reading a file that does not exist</td><td>Start with empty data, or tell the user the file is missing</td></tr>
+      <tr><td><code>PermissionError</code></td><td>The file is locked or read-only</td><td>Tell the user to close the file or check permissions</td></tr>
+      <tr><td><code>ValueError</code></td><td>A line cannot be converted, for example <code>float("abc")</code></td><td>Skip that line and count it as bad</td></tr>
+      <tr><td><code>IndexError</code></td><td>A line does not have the expected parts</td><td>Skip the line and report it</td></tr>
+    </table>
+  </section>
+
+  <!-- 6. Code -->
+  <section>
+    <h2>6. The Core Code (Read It Slowly)</h2>
+    <pre><code>FILE = "expenses.txt"
+
+def add_expense(item, amount):
+    # "a" = append: old lines stay, new line goes at the end
+    with open(FILE, "a") as f:
+        f.write(f"{item},{amount}\n")
+
+def total_spent():
+    total = 0
+    bad_lines = 0
+    try:
+        with open(FILE, "r") as f:
+            for line in f:
+                try:
+                    item, amount = line.strip().split(",")
+                    total += float(amount)
+                except ValueError:
+                    bad_lines += 1           # damaged line: skip it
+    except FileNotFoundError:
+        print("No expense file yet. Total is 0.")
+    except PermissionError:
+        print("Cannot open the file. Close it and try again.")
+    if bad_lines:
+        print(f"Skipped {bad_lines} damaged line(s).")
+    return total
+
+def clear_all():
+    # "w" = write: this ERASES everything in the file
+    with open(FILE, "w") as f:
+        pass</code></pre>
+    <p class="muted">Notice the nesting: the inner <code>try</code> protects one line, and the outer <code>try</code> protects the whole file.</p>
+  </section>
+
+  <!-- 7. Task -->
+  <section>
+    <h2>7. Your Task</h2>
+    <ol class="steps">
+      <li>Write <code>add_expense(item, amount)</code> that appends one line to <code>expenses.txt</code> using <code>"a"</code> mode and the <code>with</code> statement.</li>
+      <li>Write <code>show_all()</code> that reads and prints every expense line.</li>
+      <li>Write <code>total_spent()</code> that adds up all amounts. Handle a missing file with <code>FileNotFoundError</code>.</li>
+      <li>Make a damaged line (for example <code>Lunch,abc</code>) get skipped with <code>ValueError</code>, while the rest still count.</li>
+      <li>Write <code>clear_all()</code> that uses <code>"w"</code> mode to empty the file, and explain in a comment why this is dangerous.</li>
+      <li>Test the program on: no file yet, a file with a bad line, and a normal file. Add at least three expenses before the final test.</li>
+    </ol>
+  </section>
+
+  <!-- 8. Acceptance -->
+  <section>
+    <h2>8. Acceptance Criteria (Tick As You Go)</h2>
+    <div class="check"><input type="checkbox" id="a1"><label for="a1"><code>add_expense()</code> keeps old expenses and adds the new one at the end.</label></div>
+    <div class="check"><input type="checkbox" id="a2"><label for="a2">Every file is opened with <code>with</code>, so none is left open.</label></div>
+    <div class="check"><input type="checkbox" id="a3"><label for="a3">When <code>expenses.txt</code> does not exist, the program prints a friendly message and does not crash.</label></div>
+    <div class="check"><input type="checkbox" id="a4">A damaged line is skipped, the total still includes the good lines, and the number of skipped lines is reported.</label></div>
+    <div class="check"><input type="checkbox" id="a5"><code>PermissionError</code> is caught with a clear message.</label></div>
+    <div class="check"><input type="checkbox" id="a6"><code>clear_all()</code> uses <code>"w"</code> mode, and a comment explains that it erases the data.</label></div>
+    <div class="check"><input type="checkbox" id="a7">The totals are correct after at least three expenses are added.</label></div>
+    <div class="check"><input type="checkbox" id="a8">You can explain in your own words why <code>"a"</code> and <code>"w"</code> give different results.</label></div>
+  </section>
+
+  <!-- 9. Self-check -->
+  <section>
+    <h2>9. Self-Check Questions</h2>
+    <p>1. What is the difference between mode <code>"w"</code> and mode <code>"a"</code>?</p>
+    <p>2. Why is <code>with open(...)</code> safer than <code>f = open(...)</code>?</p>
+    <p>3. Why do we put the <code>try</code> inside the loop for each line, instead of only around the whole file?</p>
+    <p>4. What does <code>except FileNotFoundError</code> let the program do that a crash would not?</p>
+  </section>
+
+  <footer>Test the happy path first, then deliberately break the file and check that your program still behaves well.</footer>
+</div>
+
+<script>
+  // Virtual file system: the browser cannot write real files, so we keep files in memory.
+  const vfs = {
+    'expenses.txt': 'Tea,20\nBus,35\nSnacks,80\n',
+    'bad.txt': 'Pen,10\nLunch,abc\nSnack,15\n',
+    'locked.txt': 'Book,200\n'
+  };
+  const initialFiles = JSON.parse(JSON.stringify(vfs));
+  const locked = new Set(['locked.txt']);
+
+  function openFile(name, mode) {
+    if (mode === 'r') {
+      if (locked.has(name)) throw Object.assign(new Error(`Permission denied: '${name}'`), { name: 'PermissionError' });
+      if (!(name in vfs)) throw Object.assign(new Error(`No such file: '${name}'`), { name: 'FileNotFoundError' });
+    }
+    return name;
+  }
+
+  // 3. Write vs append
+  const wFile = document.getElementById('wFile');
+  const wMode = document.getElementById('wMode');
+  const wItem = document.getElementById('wItem');
+  const wOut = document.getElementById('wOut');
+  const wContent = document.getElementById('wContent');
+
+  function showW() {
+    const name = wFile.value;
+    wContent.textContent = name in vfs ? vfs[name] || '(empty file)' : '(file does not exist yet)';
+  }
+  document.getElementById('wBtn').addEventListener('click', () => {
+    const name = wFile.value;
+    const mode = wMode.value;
+    const line = wItem.value.trim() + '\n';
+    if (mode === 'a') {
+      vfs[name] = (vfs[name] || '') + line;            // append: keep old content
+      wOut.innerHTML = `<span class="ok">Opened in "a" mode and appended one line.</span>`;
+    } else {
+      const before = vfs[name] ? 'Previous content was ERASED. ' : '';
+      vfs[name] = line;                                // write: replace everything
+      wOut.innerHTML = `<span class="warn">Opened in "w" mode. ${before}Only the new line is left.</span>`;
+    }
+    showW();
+  });
+  document.getElementById('wReset').addEventListener('click', () => {
+    for (const k of Object.keys(vfs)) delete vfs[k];
+    Object.assign(vfs, JSON.parse(JSON.stringify(initialFiles)));
+    delete vfs['new.txt'];
+    wOut.textContent = 'Files reset to their starting content.';
+    showW();
+  });
+  wFile.addEventListener('change', showW);
+  showW();
+
+  // 4. Read and total with exception handling
+  const rFile = document.getElementById('rFile');
+  const rOut = document.getElementById('rOut');
+  document.getElementById('rBtn').addEventListener('click', () => {
+    const name = rFile.value;
+    const lines = [];
+    let total = 0;
+    let bad = 0;
+    try {
+      const file = openFile(name, 'r');
+      const text = vfs[file];
+      for (const raw of text.split('\n')) {
+        if (raw.trim() === '') continue;
+        try {
+          const [item, amount] = raw.trim().split(',');
+          const value = Number(amount);
+          if (amount === undefined || Number.isNaN(value)) throw new Error('bad amount');
+          total += value;
+          lines.push(`  ok    ${item.padEnd(8)} ${value}`);
+        } catch (e) {
+          bad += 1;
+          lines.push(`  skip  "${raw}"  (damaged line)`);
+        }
+      }
+      rOut.innerHTML =
+        `<span class="ok">Read ${name} successfully.</span>\n` +
+        lines.join('\n') +
+        `\n\nTotal spent: ${total}` +
+        (bad ? `\n<span class="warn">Skipped ${bad} damaged line(s).</span>` : '');
+    } catch (e) {
+      const msg = e.name === 'FileNotFoundError'
+        ? 'No expense file yet. Total is 0.'
+        : 'Cannot open the file. Close it and try again.';
+      rOut.innerHTML = `<span class="bad">Caught ${e.name}: ${e.message}</span>\n${msg}`;
+    }
+  });
+</script>
+</body>
+</html>

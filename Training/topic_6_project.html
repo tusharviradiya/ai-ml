@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project: Mini Movie Ticket Booking</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --green: #22c55e;
+    --yellow: #facc15;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+  header { text-align: center; padding: 32px 0 12px; }
+  header h1 { margin: 0 0 8px; font-size: 2rem; color: var(--accent); }
+  header p { color: var(--muted); margin: 0; }
+  section { background: var(--card); border-radius: 14px; padding: 22px; margin: 20px 0; }
+  h2 { margin: 0 0 12px; font-size: 1.4rem; }
+  h3 { margin: 6px 0 8px; font-size: 1.1rem; color: var(--accent); }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); }
+  pre {
+    background: #020617; border-radius: 10px; padding: 14px; overflow-x: auto;
+    font-size: 0.9rem; line-height: 1.5; border: 1px solid #334155;
+  }
+  code { font-family: Consolas, "Courier New", monospace; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .topic { background: #0f172a; border-radius: 12px; padding: 16px; border-left: 4px solid var(--accent); }
+  .topic.c2 { border-left-color: var(--purple); }
+  .topic.c3 { border-left-color: var(--green); }
+  .topic.c4 { border-left-color: var(--orange); }
+  .topic h3 { margin-top: 0; }
+  .demo { background: #0f172a; border-radius: 12px; padding: 16px; margin-top: 12px; }
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 8px 0; }
+  input[type=text], input[type=number] {
+    padding: 8px; border-radius: 8px; background: #1e293b; color: var(--text);
+    border: 1px solid #334155; min-width: 140px;
+  }
+  .out {
+    margin-top: 10px; padding: 12px; background: #020617; border-radius: 10px;
+    font-family: Consolas, monospace; white-space: pre-wrap; font-size: 0.92rem; min-height: 44px;
+  }
+  .ok { color: var(--green); }
+  .bad { color: var(--red); }
+  .counter { font-size: 1.6rem; font-weight: bold; color: var(--yellow); }
+  .ticket {
+    display: inline-block; width: 100%; max-width: 380px; padding: 14px; margin-top: 8px;
+    border: 2px dashed var(--accent); border-radius: 12px; background: #020617;
+    font-family: Consolas, monospace; font-size: 0.95rem;
+  }
+  button {
+    background: var(--accent); color: #0f172a; border: none; padding: 9px 16px;
+    border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.95rem;
+  }
+  button:hover { filter: brightness(1.1); }
+  button.secondary { background: #334155; color: var(--text); }
+  button.warn { background: var(--orange); }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #334155; vertical-align: top; }
+  th { color: var(--accent); }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; position: relative; padding: 8px 0 8px 44px; }
+  .steps li::before {
+    content: counter(step); position: absolute; left: 0; top: 6px;
+    width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #0f172a;
+    font-weight: bold; display: flex; align-items: center; justify-content: center;
+  }
+  .check { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
+  .check input { margin-top: 6px; width: 18px; height: 18px; accent-color: var(--green); }
+  footer { text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Mini Movie Ticket Booking</h1>
+    <p>A visual guide to Instance Methods, Class Methods, Property Methods and Static Methods</p>
+  </header>
+
+  <!-- 1. Problem -->
+  <section>
+    <h2>1. The Problem</h2>
+    <p>A cinema wants a small booking program. Each ticket needs to:</p>
+    <ul>
+      <li>Know its own <strong>seat and price</strong>, and apply its own discounts. <span class="tag">Instance method</span></li>
+      <li>Be created from a text line such as <code>Dune|A12|300</code> from the booking system. <span class="tag">Class method</span></li>
+      <li>Keep the seat valid and show the price <strong>with tax</strong> as if it were a simple value. <span class="tag">Property</span></li>
+      <li>Check whether a seat code like <code>B7</code> is valid, without needing any ticket at all. <span class="tag">Static method</span></li>
+    </ul>
+    <p class="muted">Every method type answers one question: <em>what does this method need to know?</em></p>
+  </section>
+
+  <!-- 2. Concepts -->
+  <section>
+    <h2>2. The Four Method Types</h2>
+    <div class="grid">
+      <div class="topic">
+        <h3>Instance Methods</h3>
+        <p><strong>Idea:</strong> Work on one specific object. The first parameter is <code>self</code>.</p>
+        <p class="muted">Real life: "this ticket's discount" depends on this ticket only.</p>
+        <pre><code>def apply_discount(self, percent):
+    self._price = self._price * (1 - percent / 100)
+
+ticket.apply_discount(10)</code></pre>
+      </div>
+      <div class="topic c2">
+        <h3>Class Methods</h3>
+        <p><strong>Idea:</strong> Work on the class itself. The first parameter is <code>cls</code>. Often used to create objects in a new way.</p>
+        <p class="muted">Real life: a "factory" that builds a ticket from a booking line.</p>
+        <pre><code>@classmethod
+def from_text(cls, text):
+    movie, seat, price = text.split("|")
+    return cls(movie, seat, int(price))</code></pre>
+      </div>
+      <div class="topic c3">
+        <h3>Property Methods</h3>
+        <p><strong>Idea:</strong> Use a method like a plain attribute, with extra checks or calculations behind it.</p>
+        <p class="muted">Real life: a bank app shows your balance as a number, but calculates it safely behind the scenes.</p>
+        <pre><code>@property
+def price_with_tax(self):
+    return self._price * 1.18
+
+ticket.price_with_tax    # no brackets</code></pre>
+      </div>
+      <div class="topic c4">
+        <h3>Static Methods</h3>
+        <p><strong>Idea:</strong> A helper that belongs to the class for tidiness, but needs neither <code>self</code> nor <code>cls</code>.</p>
+        <p class="muted">Real life: a rule printed on the ticket counter that anyone can read.</p>
+        <pre><code>@staticmethod
+def is_valid_seat(seat):
+    return seat[0] in "ABCDEFGH" and seat[1:].isdigit()
+
+MovieTicket.is_valid_seat("B7")   # no object needed</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Comparison -->
+  <section>
+    <h2>3. Which Method Gets What?</h2>
+    <p class="muted">The only real difference between the four types is the first thing they receive.</p>
+    <table>
+      <tr><th>Method type</th><th>First parameter</th><th>Can read/change object data?</th><th>Can read/change class data?</th><th>Called how?</th></tr>
+      <tr><td>Instance</td><td><code>self</code> (the object)</td><td>Yes</td><td>Yes</td><td><code>ticket.method()</code></td></tr>
+      <tr><td>Class</td><td><code>cls</code> (the class)</td><td>No</td><td>Yes</td><td><code>MovieTicket.method()</code></td></tr>
+      <tr><td>Property</td><td><code>self</code> (the object)</td><td>Yes</td><td>Yes</td><td><code>ticket.name</code> (no brackets)</td></tr>
+      <tr><td>Static</td><td>None</td><td>No</td><td>No</td><td><code>MovieTicket.method()</code></td></tr>
+    </table>
+  </section>
+
+  <!-- 4. Interactive: Instance method -->
+  <section>
+    <h2>4. Try It: Instance Method on One Ticket</h2>
+    <p class="muted">Each ticket object has its own price. Apply a discount to <strong>one</strong> ticket and the other is unchanged.</p>
+    <div class="demo">
+      <div class="row">
+        <button id="discBtn">ticketA.apply_discount(10)</button>
+        <button id="resetDisc" class="secondary">Reset</button>
+      </div>
+      <div class="ticket" id="ticketA"></div>
+      <div class="ticket" id="ticketB"></div>
+      <pre><code>ticket_a.apply_discount(10)    # changes only ticket_a
+ticket_b.describe()            # ticket_b is unaffected</code></pre>
+    </div>
+  </section>
+
+  <!-- 5. Interactive: Class method -->
+  <section>
+    <h2>5. Try It: Class Method Creates Tickets from Text</h2>
+    <p class="muted">Type a booking line. The class method reads it and creates a ticket object. The counter tracks tickets for the whole class.</p>
+    <div class="demo">
+      <div class="row">
+        <input type="text" id="bookLine" value="Dune|A12|300" style="min-width:260px">
+        <button id="parseBtn">MovieTicket.from_text(line)</button>
+      </div>
+      <div class="row">
+        <span>Tickets sold (class counter):</span>
+        <span class="counter" id="soldCount">0</span>
+        <button id="soldBtn" class="secondary">MovieTicket.total_sold()</button>
+      </div>
+      <div class="out" id="classOut">Enter a booking line and press the button.</div>
+    </div>
+  </section>
+
+  <!-- 6. Interactive: Property -->
+  <section>
+    <h2>6. Try It: Property Protects and Calculates</h2>
+    <p class="muted">Type a seat code. The property setter checks it with the static method. The price with tax is read like a plain value, with no brackets.</p>
+    <div class="demo">
+      <div class="row">
+        <input type="text" id="seatIn" value="C5">
+        <button id="setSeat">ticket.seat = value</button>
+      </div>
+      <div class="row">
+        <span>Price:</span>
+        <button id="showTax" class="secondary">ticket.price_with_tax</button>
+      </div>
+      <div class="out" id="propOut">Current seat: A12 | Base price: ₹300</div>
+    </div>
+  </section>
+
+  <!-- 7. Interactive: Static method -->
+  <section>
+    <h2>7. Try It: Static Method Needs No Object</h2>
+    <p class="muted">Check any seat code. No ticket is created. The rule lives on the class and works on its own.</p>
+    <div class="demo">
+      <div class="row">
+        <input type="text" id="checkSeat" value="B7">
+        <button id="checkBtn">MovieTicket.is_valid_seat(code)</button>
+      </div>
+      <div class="out" id="staticOut"></div>
+    </div>
+  </section>
+
+  <!-- 8. Code -->
+  <section>
+    <h2>8. The Core Code (Read It Slowly)</h2>
+    <pre><code>class MovieTicket:
+    tickets_sold = 0                            # class data, shared by all tickets
+    TAX_RATE = 0.18
+
+    def __init__(self, movie, seat, price):
+        self.movie = movie
+        self.seat = seat                        # goes through the property setter
+        self._price = price
+        MovieTicket.tickets_sold += 1
+
+    # ----- instance method: works on ONE ticket -----
+    def apply_discount(self, percent):
+        self._price = self._price * (1 - percent / 100)
+
+    def describe(self):
+        return f"{self.movie} | seat {self.seat} | ₹{self._price}"
+
+    # ----- class method: works on the CLASS -----
+    @classmethod
+    def from_text(cls, text):
+        movie, seat, price = text.split("|")
+        return cls(movie, seat, int(price))
+
+    @classmethod
+    def total_sold(cls):
+        return cls.tickets_sold
+
+    # ----- property: attribute-style access with checks -----
+    @property
+    def seat(self):
+        return self._seat
+
+    @seat.setter
+    def seat(self, value):
+        if not MovieTicket.is_valid_seat(value):  # calls the static method
+            raise ValueError("Seat must look like A1 to H20")
+        self._seat = value
+
+    @property
+    def price_with_tax(self):
+        return self._price * (1 + MovieTicket.TAX_RATE)
+
+    # ----- static method: a helper that needs no self or cls -----
+    @staticmethod
+    def is_valid_seat(seat):
+        return len(seat) >= 2 and seat[0] in "ABCDEFGH" and seat[1:].isdigit()</code></pre>
+    <p class="muted">Notice how the methods depend on each other: the property setter uses the static method, and the class method creates objects through <code>cls(...)</code>.</p>
+  </section>
+
+  <!-- 9. Task -->
+  <section>
+    <h2>9. Your Task</h2>
+    <ol class="steps">
+      <li>Create a <code>MovieTicket</code> class with <code>movie</code>, <code>seat</code> and <code>price</code>. Keep a class-level counter of tickets sold.</li>
+      <li>Write an <strong>instance method</strong> <code>apply_discount(percent)</code> that changes only that ticket's price.</li>
+      <li>Write a <strong>class method</strong> <code>from_text(text)</code> that reads a line like <code>Dune|A12|300</code> and returns a ticket. Also add <code>total_sold()</code>.</li>
+      <li>Write a <strong>static method</strong> <code>is_valid_seat(seat)</code> that returns <code>True</code> for codes like <code>A1</code> to <code>H20</code>.</li>
+      <li>Write a <strong>property</strong> <code>seat</code> whose setter uses <code>is_valid_seat()</code> to reject bad codes.</li>
+      <li>Write a read-only <strong>property</strong> <code>price_with_tax</code> that adds 18% tax.</li>
+      <li>Create at least three tickets (two by normal creation and one with <code>from_text</code>) and print each one's details.</li>
+    </ol>
+  </section>
+
+  <!-- 10. Acceptance -->
+  <section>
+    <h2>10. Acceptance Criteria (Tick As You Go)</h2>
+    <div class="check"><input type="checkbox" id="a1"><label for="a1"><code>apply_discount()</code> changes only the ticket it is called on.</label></div>
+    <div class="check"><input type="checkbox" id="a2"><label for="a2"><code>from_text()</code> creates a correct ticket from a line such as <code>Dune|A12|300</code>.</label></div>
+    <div class="check"><input type="checkbox" id="a3"><code>total_sold()</code> counts tickets created by both normal creation and <code>from_text()</code>.</div>
+    <div class="check"><input type="checkbox" id="a4"><code>is_valid_seat()</code> accepts <code>A1</code> and <code>H20</code>, and rejects <code>Z9</code>, <code>A</code> and <code>B-7</code>.</div>
+    <div class="check"><input type="checkbox" id="a5">Setting <code>ticket.seat = "Z9"</code> raises an error with a clear message.</div>
+    <div class="check"><input type="checkbox" id="a6"><code>price_with_tax</code> is read without brackets, and assigning to it gives an error.</div>
+    <div class="check"><input type="checkbox" id="a7">The program runs without errors for at least two different booking lists.</div>
+    <div class="check"><input type="checkbox" id="a8">You can explain in your own words what <code>self</code>, <code>cls</code> and "nothing" each give a method.</div>
+  </section>
+
+  <!-- 11. Self-check -->
+  <section>
+    <h2>11. Self-Check Questions</h2>
+    <p>1. Which method type receives <code>self</code>? Which receives <code>cls</code>? Which receives neither?</p>
+    <p>2. Why does <code>from_text</code> need to be a class method instead of an instance method?</p>
+    <p>3. Why is <code>is_valid_seat</code> a static method and not an instance method?</p>
+    <p>4. What is the benefit of <code>price_with_tax</code> being a property instead of a normal method like <code>get_price_with_tax()</code>?</p>
+  </section>
+
+  <footer>Build the class one method at a time, and test each one before moving on.</footer>
+</div>
+
+<script>
+  // JS mirror of the Python MovieTicket class (# field = private _price).
+  class MovieTicket {
+    static ticketsSold = 0;
+    static TAX_RATE = 0.18;
+    #price;
+    #seat;
+
+    constructor(movie, seat, price) {
+      this.movie = movie;
+      this.seat = seat;                 // goes through the setter
+      this.#price = price;
+      MovieTicket.ticketsSold += 1;
+    }
+    // instance method
+    applyDiscount(percent) { this.#price = this.#price * (1 - percent / 100); }
+    describe() { return `${this.movie} | seat ${this.#seat} | ₹${this.#price.toFixed(2)}`; }
+
+    // class methods
+    static fromText(text) {
+      const [movie, seat, price] = text.split('|');
+      return new this(movie.trim(), seat.trim(), Number(price));
+    }
+    static totalSold() { return MovieTicket.ticketsSold; }
+
+    // property (getter + setter)
+    get seat() { return this.#seat; }
+    set seat(value) {
+      if (!MovieTicket.isValidSeat(value)) throw new Error('Seat must look like A1 to H20');
+      this.#seat = value;
+    }
+    get priceWithTax() { return this.#price * (1 + MovieTicket.TAX_RATE); }   // read-only
+    get basePrice() { return this.#price; }
+
+    // static method
+    static isValidSeat(seat) {
+      return seat.length >= 2 && 'ABCDEFGH'.includes(seat[0]) && /^\d+$/.test(seat.slice(1));
+    }
+  }
+
+  // 4. Instance method demo
+  const ticketA = new MovieTicket('Dune', 'A12', 300);
+  const ticketB = new MovieTicket('Dune', 'B3', 300);
+  function renderTickets() {
+    document.getElementById('ticketA').textContent = ticketA.describe();
+    document.getElementById('ticketB').textContent = ticketB.describe();
+  }
+  document.getElementById('discBtn').addEventListener('click', () => {
+    ticketA.applyDiscount(10);
+    renderTickets();
+  });
+  document.getElementById('resetDisc').addEventListener('click', () => {
+    ticketA.applyDiscount(0);
+    // reset price by rebuilding the same base for demo clarity
+    const fresh = new MovieTicket('Dune', 'A12', 300);
+    ticketA.applyDiscount(0);
+    renderTickets();
+  });
+  renderTickets();
+
+  // 5. Class method demo
+  const soldCount = document.getElementById('soldCount');
+  const classOut = document.getElementById('classOut');
+  document.getElementById('parseBtn').addEventListener('click', () => {
+    try {
+      const t = MovieTicket.fromText(document.getElementById('bookLine').value);
+      classOut.innerHTML = `<span class="ok">Created from text:</span>\n${t.describe()}`;
+    } catch (e) {
+      classOut.innerHTML = `<span class="bad">Could not read that line: ${e.message}</span>`;
+    }
+    soldCount.textContent = MovieTicket.totalSold();
+  });
+  document.getElementById('soldBtn').addEventListener('click', () => {
+    soldCount.textContent = MovieTicket.totalSold();
+  });
+  soldCount.textContent = MovieTicket.totalSold();
+
+  // 6. Property demo
+  const demoTicket = new MovieTicket('Dune', 'A12', 300);
+  const propOut = document.getElementById('propOut');
+  document.getElementById('setSeat').addEventListener('click', () => {
+    const value = document.getElementById('seatIn').value.trim();
+    try {
+      demoTicket.seat = value;
+      propOut.innerHTML = `<span class="ok">Seat set to ${demoTicket.seat}</span>`;
+    } catch (e) {
+      propOut.innerHTML = `<span class="bad">${e.message}. Seat stays ${demoTicket.seat}</span>`;
+    }
+  });
+  document.getElementById('showTax').addEventListener('click', () => {
+    propOut.textContent =
+      `ticket.price_with_tax  →  ₹${demoTicket.priceWithTax.toFixed(2)}\n` +
+      `(base price ₹${demoTicket.basePrice}, no brackets used)`;
+  });
+
+  // 7. Static method demo
+  document.getElementById('checkBtn').addEventListener('click', () => {
+    const code = document.getElementById('checkSeat').value.trim();
+    const ok = MovieTicket.isValidSeat(code);
+    document.getElementById('staticOut').innerHTML =
+      `MovieTicket.is_valid_seat("${code}")  →  ` +
+      (ok ? '<span class="ok">True</span>' : '<span class="bad">False</span>') +
+      `\nNo ticket object was created to check this.`;
+  });
+</script>
+</body>
+</html>
