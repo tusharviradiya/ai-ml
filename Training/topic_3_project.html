@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project: Class Marks Report Generator</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --green: #22c55e;
+    --yellow: #facc15;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+  header { text-align: center; padding: 32px 0 12px; }
+  header h1 { margin: 0 0 8px; font-size: 2rem; color: var(--accent); }
+  header p { color: var(--muted); margin: 0; }
+  section { background: var(--card); border-radius: 14px; padding: 22px; margin: 20px 0; }
+  h2 { margin: 0 0 12px; font-size: 1.4rem; }
+  h3 { margin: 6px 0 8px; font-size: 1.1rem; color: var(--accent); }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); }
+  .tag {
+    display: inline-block; background: #0f172a; border: 1px solid #334155;
+    padding: 3px 10px; border-radius: 999px; font-size: 0.85rem; margin: 3px 4px 3px 0;
+  }
+  pre {
+    background: #020617; border-radius: 10px; padding: 14px; overflow-x: auto;
+    font-size: 0.9rem; line-height: 1.5; border: 1px solid #334155;
+  }
+  code { font-family: Consolas, "Courier New", monospace; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .topic { background: #0f172a; border-radius: 12px; padding: 16px; border-left: 4px solid var(--accent); }
+  .topic.c2 { border-left-color: var(--purple); }
+  .topic.c3 { border-left-color: var(--green); }
+  .topic.c4 { border-left-color: var(--yellow); }
+  .topic.c5 { border-left-color: var(--orange); }
+  .topic.c6 { border-left-color: var(--red); }
+  .topic h3 { margin-top: 0; }
+  .demo { background: #0f172a; border-radius: 12px; padding: 16px; margin-top: 12px; }
+  .row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 8px 0; }
+  input[type=range] { flex: 1; min-width: 180px; accent-color: var(--accent); }
+  .big { font-size: 1.2rem; font-weight: bold; color: var(--accent); }
+  .out {
+    margin-top: 10px; padding: 12px; background: #020617; border-radius: 10px;
+    font-family: Consolas, monospace; white-space: pre-wrap; font-size: 0.92rem; min-height: 44px;
+  }
+  button {
+    background: var(--accent); color: #0f172a; border: none; padding: 9px 16px;
+    border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.95rem;
+  }
+  button:hover { filter: brightness(1.1); }
+  button.secondary { background: #334155; color: var(--text); }
+  select { padding: 8px; border-radius: 8px; background: #1e293b; color: var(--text); border: 1px solid #334155; }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; position: relative; padding: 8px 0 8px 44px; }
+  .steps li::before {
+    content: counter(step); position: absolute; left: 0; top: 6px;
+    width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #0f172a;
+    font-weight: bold; display: flex; align-items: center; justify-content: center;
+  }
+  .check { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
+  .check input { margin-top: 6px; width: 18px; height: 18px; accent-color: var(--green); }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #334155; }
+  th { color: var(--accent); }
+  footer { text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Class Marks Report Generator</h1>
+    <p>A visual guide to List Comprehensions, Functions, Lambda, *args/**kwargs, Decorators and Generators</p>
+  </header>
+
+  <!-- 1. Problem -->
+  <section>
+    <h2>1. The Problem</h2>
+    <p>
+      A teacher has marks for every student in a class. She wants a small program that:
+    </p>
+    <ul>
+      <li>Finds the students who <strong>passed</strong> (marks 40 and above) in one quick line. <span class="tag">List Comprehension</span></li>
+      <li>Ranks students from highest to lowest marks. <span class="tag">Lambda</span></li>
+      <li>Calculates an average for <em>any number</em> of subjects. <span class="tag">*args</span></li>
+      <li>Creates a report with optional details such as city or club. <span class="tag">**kwargs</span></li>
+      <li>Logs every report it builds, without changing the report code itself. <span class="tag">Decorator</span></li>
+      <li>Reads students one at a time to save memory for a large class. <span class="tag">Generator</span></li>
+    </ul>
+    <p class="muted">Professional code uses all of these. Each one solves a real problem you will meet.</p>
+  </section>
+
+  <!-- 2. Concepts -->
+  <section>
+    <h2>2. The Six Tools</h2>
+    <div class="grid">
+      <div class="topic">
+        <h3>List Comprehensions</h3>
+        <p><strong>Idea:</strong> Build a new list from another list in one line.</p>
+        <p class="muted">Real life: "Give me only the passing marks."</p>
+        <pre><code>passed = [m for m in marks if m >= 40]</code></pre>
+      </div>
+      <div class="topic c2">
+        <h3>Functions</h3>
+        <p><strong>Idea:</strong> Name a block of work once and reuse it.</p>
+        <p class="muted">Real life: a recipe you can follow again and again.</p>
+        <pre><code>def grade(marks):
+    if marks >= 75:
+        return "A"
+    return "B"</code></pre>
+      </div>
+      <div class="topic c3">
+        <h3>Lambda Functions</h3>
+        <p><strong>Idea:</strong> A tiny, nameless function for a quick job.</p>
+        <p class="muted">Real life: a one-line instruction written on the spot.</p>
+        <pre><code>ranked = sorted(students, key=lambda s: s["marks"], reverse=True)</code></pre>
+      </div>
+      <div class="topic c4">
+        <h3>*args and **kwargs</h3>
+        <p><strong>Idea:</strong> Accept a flexible number of inputs.</p>
+        <p class="muted">*args = extra positional values (a tuple). **kwargs = extra named values (a dict).</p>
+        <pre><code>def report(name, *marks, **info):
+    ...
+report("Riya", 50, 70, city="Pune")</code></pre>
+      </div>
+      <div class="topic c5">
+        <h3>Decorators</h3>
+        <p><strong>Idea:</strong> Wrap a function with extra behaviour, like a gift wrap.</p>
+        <p class="muted">Real life: a security guard checks people before and after they enter.</p>
+        <pre><code>@log_call
+def make_report(...):
+    ...</code></pre>
+      </div>
+      <div class="topic c6">
+        <h3>Generators</h3>
+        <p><strong>Idea:</strong> Produce values one at a time, when asked, using <code>yield</code>.</p>
+        <p class="muted">Real life: a ticket counter that serves one person at a time.</p>
+        <pre><code>def read_students(rows):
+    for row in rows:
+        yield row</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Pipeline -->
+  <section>
+    <h2>3. How the Pieces Connect (Pipeline)</h2>
+    <p class="muted">Data flows from left to right. Each tool does one job.</p>
+    <table>
+      <tr><th>Step</th><th>Tool</th><th>What it does</th></tr>
+      <tr><td>1. Read students</td><td>Generator</td><td>Yields one student at a time</td></tr>
+      <tr><td>2. Build reports</td><td>Function + Decorator</td><td>Creates each report and logs it</td></tr>
+      <tr><td>3. Accept details</td><td>*args / **kwargs</td><td>Handles any number of marks and optional info</td></tr>
+      <tr><td>4. Filter passes</td><td>List comprehension</td><td>Keeps marks of 40 and above</td></tr>
+      <tr><td>5. Rank students</td><td>Lambda + sorted()</td><td>Sorts by marks, highest first</td></tr>
+    </table>
+  </section>
+
+  <!-- 4. Interactive: list comprehension -->
+  <section>
+    <h2>4. Try It: List Comprehension Filter</h2>
+    <p class="muted">Move the slider. The comprehension keeps only marks that are at least the threshold.</p>
+    <div class="demo">
+      <div class="row">
+        <span>Pass mark:</span>
+        <input type="range" id="thr" min="0" max="100" value="40">
+        <span class="big" id="thrVal">40</span>
+      </div>
+      <pre><code>marks = [35, 72, 40, 88, 51, 23, 67]
+passed = [m for m in marks if m &gt;= 40]</code></pre>
+      <div class="out" id="compOut"></div>
+    </div>
+  </section>
+
+  <!-- 5. Interactive: lambda sort -->
+  <section>
+    <h2>5. Try It: Lambda for Ranking</h2>
+    <p class="muted">Pick a sort order. The lambda tells <code>sorted()</code> which value to compare.</p>
+    <div class="demo">
+      <div class="row">
+        <select id="order">
+          <option value="desc">Highest first</option>
+          <option value="asc">Lowest first</option>
+        </select>
+        <button id="sortBtn">Sort</button>
+      </div>
+      <pre><code>students = [{"name": "Riya", "marks": 82},
+            {"name": "Arjun", "marks": 45},
+            {"name": "Meera", "marks": 91}]
+ranked = sorted(students, key=lambda s: s["marks"], reverse=True)</code></pre>
+      <div class="out" id="sortOut">Click Sort to see the ranking.</div>
+    </div>
+  </section>
+
+  <!-- 6. Interactive: *args / **kwargs -->
+  <section>
+    <h2>6. Try It: *args and **kwargs</h2>
+    <p class="muted">Add or remove subject marks. Watch how Python packs them into a tuple.</p>
+    <div class="demo">
+      <div class="row">
+        <button id="addMark">+ Add subject mark</button>
+        <button id="removeMark" class="secondary">− Remove</button>
+      </div>
+      <pre><code>def average(*marks):          # marks is a tuple
+    return sum(marks) / len(marks)
+
+average(50, 70, 90)           # marks = (50, 70, 90)</code></pre>
+      <div class="out" id="argsOut"></div>
+    </div>
+    <div class="demo">
+      <p class="muted">Now the optional details. <code>**info</code> collects named values into a dictionary.</p>
+      <div class="row">
+        <select id="cityPick">
+          <option>Pune</option>
+          <option>Surat</option>
+          <option>Delhi</option>
+        </select>
+        <button id="infoBtn">Build report</button>
+      </div>
+      <pre><code>def make_report(name, *marks, **info):   # info is a dict
+    ...
+
+make_report("Riya", 50, 70, city="Pune")</code></pre>
+      <div class="out" id="kwOut"></div>
+    </div>
+  </section>
+
+  <!-- 7. Interactive: decorator -->
+  <section>
+    <h2>7. Try It: Decorator Wrapping a Function</h2>
+    <p class="muted">The decorator adds a log before and after <code>make_report</code>. The function itself never changes.</p>
+    <div class="demo">
+      <div class="row">
+        <button id="runReport">Run make_report()</button>
+        <button id="clearLog" class="secondary">Clear log</button>
+      </div>
+      <pre><code>def log_call(func):
+    def wrapper(*args, **kwargs):
+        print("→ calling", func.__name__)
+        result = func(*args, **kwargs)
+        print("← finished", func.__name__)
+        return result
+    return wrapper
+
+@log_call
+def make_report(name, *marks, **info):
+    ...</code></pre>
+      <div class="out" id="decOut">Log is empty.</div>
+    </div>
+  </section>
+
+  <!-- 8. Interactive: generator -->
+  <section>
+    <h2>8. Try It: Generator Yielding One Student at a Time</h2>
+    <p class="muted">Click <strong>Next</strong>. Each click runs the generator only until the next <code>yield</code>.</p>
+    <div class="demo">
+      <div class="row">
+        <button id="genNext">Next student</button>
+        <button id="genReset" class="secondary">Restart</button>
+      </div>
+      <pre><code>def read_students(rows):
+    for row in rows:
+        yield row          # pause here, hand back one student</code></pre>
+      <div class="out" id="genOut">Generator not started.</div>
+    </div>
+  </section>
+
+  <!-- 9. Task -->
+  <section>
+    <h2>9. Your Task</h2>
+    <ol class="steps">
+      <li>Create a list of at least five student dictionaries with <code>name</code> and <code>marks</code>.</li>
+      <li>Write a generator <code>read_students(rows)</code> that yields one student at a time.</li>
+      <li>Write <code>average(*marks)</code> that returns the average of any number of marks.</li>
+      <li>Write <code>make_report(name, *marks, **info)</code> that returns a formatted text report. <code>info</code> can hold optional details like city.</li>
+      <li>Add a decorator <code>@log_call</code> to <code>make_report</code> that prints a message before and after it runs.</li>
+      <li>Use a list comprehension to build a list of passing students (average 40 or above).</li>
+      <li>Use <code>sorted()</code> with a lambda to rank students by average, highest first.</li>
+      <li>Print the ranked report for all students.</li>
+    </ol>
+  </section>
+
+  <!-- 10. Acceptance -->
+  <section>
+    <h2>10. Acceptance Criteria (Tick As You Go)</h2>
+    <div class="check"><input type="checkbox" id="a1"><label for="a1">The generator yields one student per step, and the loop works with no full list needed.</label></div>
+    <div class="check"><input type="checkbox" id="a2"><label for="a2"><code>average()</code> works with 1, 3 and 5 marks without changing the function.</label></div>
+    <div class="check"><input type="checkbox" id="a3"><label for="a3"><code>make_report()</code> accepts extra details such as <code>city</code> through <code>**info</code>, and works when none are given.</label></div>
+    <div class="check"><input type="checkbox" id="a4">The decorator prints a log line before and after <code>make_report</code>, and <code>make_report</code> itself has no logging code.</div>
+    <div class="check"><input type="checkbox" id="a5">The passing list is built with a single list comprehension and includes only averages of 40 or more.</label></div>
+    <div class="check"><input type="checkbox" id="a6">The ranking uses <code>sorted()</code> with a lambda key and shows the highest mark first.</label></div>
+    <div class="check"><input type="checkbox" id="a7">The program runs without errors for at least two different classes of students.</label></div>
+    <div class="check"><input type="checkbox" id="a8">You can explain in your own words why a generator is useful for a very large class.</label></div>
+  </section>
+
+  <!-- 11. Self-check -->
+  <section>
+    <h2>11. Self-Check Questions</h2>
+    <p>1. What type does <code>*marks</code> become inside a function? What type does <code>**info</code> become?</p>
+    <p>2. What does the <code>@log_call</code> line do, in one sentence?</p>
+    <p>3. Why does a generator use <code>yield</code> instead of <code>return</code>?</p>
+    <p>4. Could you write the passing list with a normal <code>for</code> loop? Which version is easier to read, and why?</p>
+  </section>
+
+  <footer>Build one tool at a time. Test each part before you connect it to the next.</footer>
+</div>
+
+<script>
+  // 4. List comprehension demo
+  const marks = [35, 72, 40, 88, 51, 23, 67];
+  const thr = document.getElementById('thr');
+  const thrVal = document.getElementById('thrVal');
+  const compOut = document.getElementById('compOut');
+  function updateComp() {
+    const t = Number(thr.value);
+    thrVal.textContent = t;
+    const passed = marks.filter(m => m >= t);
+    compOut.textContent =
+      `marks  = [${marks.join(', ')}]\n` +
+      `passed = [${passed.join(', ')}]\n` +
+      `${passed.length} of ${marks.length} marks are at or above ${t}`;
+  }
+  thr.addEventListener('input', updateComp);
+  updateComp();
+
+  // 5. Lambda sort demo
+  const students = [
+    { name: 'Riya', marks: 82 },
+    { name: 'Arjun', marks: 45 },
+    { name: 'Meera', marks: 91 }
+  ];
+  document.getElementById('sortBtn').addEventListener('click', () => {
+    const desc = document.getElementById('order').value === 'desc';
+    const ranked = [...students].sort((a, b) => desc ? b.marks - a.marks : a.marks - b.marks);
+    document.getElementById('sortOut').textContent =
+      ranked.map((s, i) => `${i + 1}. ${s.name.padEnd(8)} ${s.marks}`).join('\n');
+  });
+
+  // 6. *args demo
+  const subjectMarks = [50, 70, 90];
+  const argsOut = document.getElementById('argsOut');
+  function showArgs() {
+    const avg = subjectMarks.reduce((a, b) => a + b, 0) / subjectMarks.length;
+    argsOut.textContent =
+      `marks = (${subjectMarks.join(', ')})\n` +
+      `average = ${avg.toFixed(2)}`;
+  }
+  document.getElementById('addMark').addEventListener('click', () => {
+    subjectMarks.push(Math.floor(Math.random() * 51) + 40);
+    showArgs();
+  });
+  document.getElementById('removeMark').addEventListener('click', () => {
+    if (subjectMarks.length > 1) subjectMarks.pop();
+    showArgs();
+  });
+  showArgs();
+
+  // 6b. **kwargs demo
+  document.getElementById('infoBtn').addEventListener('click', () => {
+    const city = document.getElementById('cityPick').value;
+    document.getElementById('kwOut').textContent =
+      `name = "Riya"\n` +
+      `marks = (50, 70)        # *marks -> tuple\n` +
+      `info  = {"city": "${city}"}   # **info -> dict`;
+  });
+
+  // 7. Decorator demo
+  const decOut = document.getElementById('decOut');
+  function appendLog(line) {
+    if (decOut.textContent === 'Log is empty.') decOut.textContent = '';
+    decOut.textContent += (decOut.textContent ? '\n' : '') + line;
+  }
+  // simulates the wrapper: runs before and after the real function
+  document.getElementById('runReport').addEventListener('click', () => {
+    appendLog('→ calling make_report');
+    appendLog('   report built for Riya: average 60.00');
+    appendLog('← finished make_report');
+  });
+  document.getElementById('clearLog').addEventListener('click', () => {
+    decOut.textContent = 'Log is empty.';
+  });
+
+  // 8. Generator demo (JS generator mirrors Python yield)
+  const rows = ['Riya', 'Arjun', 'Meera', 'Kabir'];
+  function* readStudents(list) {
+    for (const row of list) {
+      yield row;
+    }
+  }
+  let gen = readStudents(rows);
+  const genOut = document.getElementById('genOut');
+  document.getElementById('genNext').addEventListener('click', () => {
+    const result = gen.next();
+    if (result.done) {
+      genOut.textContent = 'Generator finished: no more students.';
+    } else {
+      genOut.textContent = `next() gave: "${result.value}"\n(the generator paused right after yield)`;
+    }
+  });
+  document.getElementById('genReset').addEventListener('click', () => {
+    gen = readStudents(rows);
+    genOut.textContent = 'Generator restarted.';
+  });
+</script>
+</body>
+</html>
