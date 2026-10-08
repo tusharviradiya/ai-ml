@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project: Mini Bank Account System</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --green: #22c55e;
+    --yellow: #facc15;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+  header { text-align: center; padding: 32px 0 12px; }
+  header h1 { margin: 0 0 8px; font-size: 2rem; color: var(--accent); }
+  header p { color: var(--muted); margin: 0; }
+  section { background: var(--card); border-radius: 14px; padding: 22px; margin: 20px 0; }
+  h2 { margin: 0 0 12px; font-size: 1.4rem; }
+  h3 { margin: 6px 0 8px; font-size: 1.1rem; color: var(--accent); }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); }
+  .tag {
+    display: inline-block; background: #0f172a; border: 1px solid #334155;
+    padding: 3px 10px; border-radius: 999px; font-size: 0.85rem; margin: 3px 4px 3px 0;
+  }
+  pre {
+    background: #020617; border-radius: 10px; padding: 14px; overflow-x: auto;
+    font-size: 0.9rem; line-height: 1.5; border: 1px solid #334155;
+  }
+  code { font-family: Consolas, "Courier New", monospace; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .topic { background: #0f172a; border-radius: 12px; padding: 16px; border-left: 4px solid var(--accent); }
+  .topic.c2 { border-left-color: var(--purple); }
+  .topic.c3 { border-left-color: var(--green); }
+  .topic.c4 { border-left-color: var(--orange); }
+  .topic h3 { margin-top: 0; }
+  .demo { background: #0f172a; border-radius: 12px; padding: 16px; margin-top: 12px; }
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 8px 0; }
+  input[type=number], input[type=text] {
+    padding: 8px; border-radius: 8px; background: #1e293b; color: var(--text);
+    border: 1px solid #334155; width: 150px;
+  }
+  select { padding: 8px; border-radius: 8px; background: #1e293b; color: var(--text); border: 1px solid #334155; }
+  .out {
+    margin-top: 10px; padding: 12px; background: #020617; border-radius: 10px;
+    font-family: Consolas, monospace; white-space: pre-wrap; font-size: 0.92rem; min-height: 44px;
+  }
+  .ok { color: var(--green); }
+  .bad { color: var(--red); }
+  button {
+    background: var(--accent); color: #0f172a; border: none; padding: 9px 16px;
+    border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.95rem;
+  }
+  button:hover { filter: brightness(1.1); }
+  button.secondary { background: #334155; color: var(--text); }
+  button.warn { background: var(--orange); }
+  .tree { font-family: Consolas, monospace; font-size: 0.95rem; line-height: 1.9; }
+  .node {
+    display: inline-block; padding: 4px 12px; border-radius: 8px; border: 2px solid #334155;
+    background: #020617; cursor: pointer; transition: all 0.2s;
+  }
+  .node:hover { border-color: var(--accent); }
+  .node.sel { border-color: var(--green); background: #052e16; }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; position: relative; padding: 8px 0 8px 44px; }
+  .steps li::before {
+    content: counter(step); position: absolute; left: 0; top: 6px;
+    width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #0f172a;
+    font-weight: bold; display: flex; align-items: center; justify-content: center;
+  }
+  .check { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
+  .check input { margin-top: 6px; width: 18px; height: 18px; accent-color: var(--green); }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #334155; }
+  th { color: var(--accent); }
+  footer { text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Mini Bank Account System</h1>
+    <p>A visual guide to Classes and Objects, Inheritance, Polymorphism and Encapsulation</p>
+  </header>
+
+  <!-- 1. Problem -->
+  <section>
+    <h2>1. The Problem</h2>
+    <p>A small bank offers three kinds of accounts. Each one holds money and behaves a little differently:</p>
+    <ul>
+      <li><strong>Basic account</strong>: deposits and withdrawals only.</li>
+      <li><strong>Savings account</strong>: a basic account that also earns interest every month.</li>
+      <li><strong>Current account</strong>: a basic account that pays a monthly fee.</li>
+    </ul>
+    <p>Your program must keep each account's balance safe, reuse the common rules, and run the month-end process for every account with one simple loop.</p>
+    <p class="muted">Real banking software is built exactly this way. These four ideas are the foundation of it.</p>
+  </section>
+
+  <!-- 2. Concepts -->
+  <section>
+    <h2>2. The Four Ideas</h2>
+    <div class="grid">
+      <div class="topic">
+        <h3>Classes and Objects</h3>
+        <p><strong>Idea:</strong> A class is the blueprint. An object is one thing built from it.</p>
+        <p class="muted">Real life: a cookie cutter (class) and each cookie (object).</p>
+        <pre><code>class BankAccount:
+    def __init__(self, owner, balance=0):
+        self.owner = owner
+        self.balance = balance
+
+riya = BankAccount("Riya", 10000)</code></pre>
+      </div>
+      <div class="topic c2">
+        <h3>Inheritance</h3>
+        <p><strong>Idea:</strong> A child class gets everything from its parent, and can add or change things.</p>
+        <p class="muted">Real life: a child inherits features from a parent, then adds its own.</p>
+        <pre><code>class SavingsAccount(BankAccount):
+    def __init__(self, owner, balance=0, rate=0.04):
+        super().__init__(owner, balance)
+        self.rate = rate</code></pre>
+      </div>
+      <div class="topic c3">
+        <h3>Polymorphism</h3>
+        <p><strong>Idea:</strong> The same method name behaves differently for each type of object.</p>
+        <p class="muted">Real life: "Pay" means something different for cash, card and UPI.</p>
+        <pre><code>for acc in accounts:
+    acc.month_end()   # each type does its own thing</code></pre>
+      </div>
+      <div class="topic c4">
+        <h3>Encapsulation</h3>
+        <p><strong>Idea:</strong> Keep the data private and change it only through safe methods.</p>
+        <p class="muted">Real life: you use an ATM buttons, not the bank vault door.</p>
+        <pre><code>self.__balance = balance      # private
+def deposit(self, amount):
+    if amount <= 0:
+        raise ValueError("Amount must be positive")
+    self.__balance += amount</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Structure -->
+  <section>
+    <h2>3. The Class Family (Inheritance Tree)</h2>
+    <p class="muted">Click any class to see what it inherits and what it adds.</p>
+    <div class="tree">
+      <div class="node sel" id="n-base" onclick="showClass('base')">BankAccount</div>
+      <div style="margin-left:28px">
+        └─ <span class="node" id="n-sav" onclick="showClass('sav')">SavingsAccount</span>
+      </div>
+      <div style="margin-left:28px">
+        └─ <span class="node" id="n-cur" onclick="showClass('cur')">CurrentAccount</span>
+      </div>
+    </div>
+    <div class="out" id="treeOut"></div>
+  </section>
+
+  <!-- 4. Interactive: Classes and objects -->
+  <section>
+    <h2>4. Try It: Build Objects from the Class</h2>
+    <p class="muted">Enter a name and an opening balance. Each click creates a new object from the same blueprint.</p>
+    <div class="demo">
+      <div class="row">
+        <input type="text" id="newName" placeholder="Name" value="Kabir">
+        <input type="number" id="newBal" placeholder="Opening balance" value="3000">
+        <button id="createBtn">Create account</button>
+      </div>
+      <pre><code>kabir = BankAccount("Kabir", 3000)   # one new object</code></pre>
+      <div class="out" id="createOut">Created accounts will appear below.</div>
+    </div>
+  </section>
+
+  <!-- 5. Interactive: Encapsulation -->
+  <section>
+    <h2>5. Try It: Encapsulation Protects the Balance</h2>
+    <p class="muted">Try to deposit money. Only valid amounts are accepted, and the balance can only change through <code>deposit()</code> and <code>withdraw()</code>.</p>
+    <div class="demo">
+      <div class="row">
+        <span>Account: Riya (balance ₹<span id="encBal">10000</span>)</span>
+      </div>
+      <div class="row">
+        <input type="number" id="encAmt" value="500">
+        <button id="depBtn">deposit(amount)</button>
+        <button id="wdBtn" class="secondary">withdraw(amount)</button>
+      </div>
+      <div class="row">
+        <button id="directBtn" class="warn">Try: riya.balance = 999999</button>
+      </div>
+      <div class="out" id="encOut">Enter an amount and press a button.</div>
+    </div>
+  </section>
+
+  <!-- 6. Interactive: Polymorphism -->
+  <section>
+    <h2>6. Try It: Polymorphism at Month End</h2>
+    <p class="muted">The bank runs <strong>one</strong> loop and calls <code>month_end()</code> on every account. Each type reacts in its own way.</p>
+    <div class="demo">
+      <table>
+        <tr><th>Owner</th><th>Type</th><th>Balance (₹)</th></tr>
+        <tbody id="accTable"></tbody>
+      </table>
+      <div class="row" style="margin-top:12px">
+        <button id="monthBtn">Run month_end() for all</button>
+        <button id="resetAcc" class="secondary">Reset accounts</button>
+      </div>
+      <pre><code>for acc in accounts:
+    acc.month_end()      # Savings adds interest, Current pays a fee</code></pre>
+      <div class="out" id="monthOut">Press the button to run month end.</div>
+    </div>
+  </section>
+
+  <!-- 7. Code -->
+  <section>
+    <h2>7. The Core Code (Read It Slowly)</h2>
+    <pre><code>class BankAccount:
+    def __init__(self, owner, balance=0):
+        self.owner = owner
+        self.__balance = balance              # encapsulation: private
+
+    def deposit(self, amount):
+        if amount <= 0:
+            raise ValueError("Amount must be positive")
+        self.__balance += amount
+
+    def withdraw(self, amount):
+        if amount <= 0 or amount > self.__balance:
+            raise ValueError("Invalid withdrawal")
+        self.__balance -= amount
+
+    def get_balance(self):
+        return self.__balance
+
+    def _change(self, amount):                # protected: for child classes
+        self.__balance += amount
+
+    def month_end(self):
+        pass                                  # basic account: nothing happens
+
+
+class SavingsAccount(BankAccount):            # inheritance
+    def __init__(self, owner, balance=0, rate=0.04):
+        super().__init__(owner, balance)
+        self.rate = rate
+
+    def month_end(self):                      # polymorphism: own version
+        self._change(self.get_balance() * self.rate / 12)
+
+
+class CurrentAccount(BankAccount):
+    def month_end(self):                      # polymorphism: own version
+        self._change(-50)                     # monthly fee</code></pre>
+    <p class="muted">Notice: the child classes never touch <code>__balance</code> directly. They use the parent's safe methods.</p>
+  </section>
+
+  <!-- 8. Task -->
+  <section>
+    <h2>8. Your Task</h2>
+    <ol class="steps">
+      <li>Create a <code>BankAccount</code> class with <code>owner</code> and a private balance.</li>
+      <li>Add <code>deposit()</code> and <code>withdraw()</code> methods that reject invalid amounts.</li>
+      <li>Create <code>SavingsAccount</code> that inherits from <code>BankAccount</code> and adds interest in <code>month_end()</code>.</li>
+      <li>Create <code>CurrentAccount</code> that inherits from <code>BankAccount</code> and charges a fee in <code>month_end()</code>.</li>
+      <li>Make a list with at least three accounts of different types and loop through it, calling <code>month_end()</code> on each.</li>
+      <li>Print each account's owner, type and balance after month end.</li>
+    </ol>
+  </section>
+
+  <!-- 9. Acceptance -->
+  <section>
+    <h2>9. Acceptance Criteria (Tick As You Go)</h2>
+    <div class="check"><input type="checkbox" id="a1"><label for="a1">Each account is an object created from a class, and two objects keep separate balances.</label></div>
+    <div class="check"><input type="checkbox" id="a2"><label for="a2">The balance is private: <code>acc.__balance</code> is not used outside the class.</label></div>
+    <div class="check"><input type="checkbox" id="a3"><label for="a3"><code>deposit()</code> rejects zero and negative amounts with a clear message.</label></div>
+    <div class="check"><input type="checkbox" id="a4"><label for="a4"><code>withdraw()</code> rejects amounts larger than the balance.</label></div>
+    <div class="check"><input type="checkbox" id="a5"><label for="a5"><code>SavingsAccount</code> and <code>CurrentAccount</code> reuse <code>deposit()</code>, <code>withdraw()</code> and <code>get_balance()</code> from the parent without copying code.</label></div>
+    <div class="check"><input type="checkbox" id="a6">One loop calls <code>month_end()</code> on all accounts, and each type gives a different result.</label></div>
+    <div class="check"><input type="checkbox" id="a7">The program runs without errors for at least two different sets of accounts.</label></div>
+    <div class="check"><input type="checkbox" id="a8">You can explain in your own words what "encapsulation" protects against.</label></div>
+  </section>
+
+  <!-- 10. Self-check -->
+  <section>
+    <h2>10. Self-Check Questions</h2>
+    <p>1. What is the difference between a class and an object? Give an example from this project.</p>
+    <p>2. What does <code>super().__init__(...)</code> do in <code>SavingsAccount</code>?</p>
+    <p>3. Why is <code>month_end()</code> an example of polymorphism?</p>
+    <p>4. What could go wrong if <code>balance</code> were public and anyone could set it to any value?</p>
+  </section>
+
+  <footer>Build the parent class first, test it, then add the child classes one at a time.</footer>
+</div>
+
+<script>
+  // Shared: encapsulated account class (JS # fields are truly private, like Python's __balance)
+  class BankAccount {
+    #balance;
+    constructor(owner, balance = 0) {
+      this.owner = owner;
+      this.#balance = balance;
+    }
+    deposit(amount) {
+      if (amount <= 0) throw new Error("Amount must be positive");
+      this.#balance += amount;
+    }
+    withdraw(amount) {
+      if (amount <= 0 || amount > this.#balance) throw new Error("Invalid withdrawal");
+      this.#balance -= amount;
+    }
+    getBalance() { return this.#balance; }
+    _change(amount) { this.#balance += amount; }   // protected helper for children
+    monthEnd() { return "no change"; }
+    get type() { return "Basic"; }
+  }
+  class SavingsAccount extends BankAccount {
+    constructor(owner, balance = 0, rate = 0.04) {
+      super(owner, balance);
+      this.rate = rate;
+    }
+    monthEnd() {
+      const interest = this.getBalance() * this.rate / 12;
+      this._change(interest);
+      return `+ interest ₹${interest.toFixed(2)}`;
+    }
+    get type() { return "Savings"; }
+  }
+  class CurrentAccount extends BankAccount {
+    monthEnd() {
+      this._change(-50);
+      return "- monthly fee ₹50";
+    }
+    get type() { return "Current"; }
+  }
+
+  // 3. Inheritance tree explanation
+  const treeInfo = {
+    base: "BankAccount (parent)\nHas: owner, private balance, deposit(), withdraw(), get_balance(), month_end() [does nothing]",
+    sav: "SavingsAccount (child of BankAccount)\nInherits: owner, balance, deposit(), withdraw(), get_balance()\nAdds: rate, its own month_end() that pays interest",
+    cur: "CurrentAccount (child of BankAccount)\nInherits: owner, balance, deposit(), withdraw(), get_balance()\nAdds: its own month_end() that charges a ₹50 fee"
+  };
+  function showClass(key) {
+    ['base', 'sav', 'cur'].forEach(k => {
+      document.getElementById('n-' + k).classList.toggle('sel', k === key);
+    });
+    document.getElementById('treeOut').textContent = treeInfo[key];
+  }
+  showClass('base');
+
+  // 4. Create objects
+  const created = [];
+  document.getElementById('createBtn').addEventListener('click', () => {
+    const name = document.getElementById('newName').value.trim() || 'Guest';
+    const bal = Number(document.getElementById('newBal').value) || 0;
+    const acc = new BankAccount(name, bal);
+    created.push(acc);
+    document.getElementById('createOut').textContent =
+      created.map((a, i) => `object #${i + 1}: owner = "${a.owner}", balance = ₹${a.getBalance()}`).join('\n');
+  });
+
+  // 5. Encapsulation demo (one account)
+  const riya = new BankAccount('Riya', 10000);
+  const encBal = document.getElementById('encBal');
+  const encOut = document.getElementById('encOut');
+  const encAmt = document.getElementById('encAmt');
+  function refreshEnc() { encBal.textContent = riya.getBalance(); }
+  document.getElementById('depBtn').addEventListener('click', () => {
+    try {
+      riya.deposit(Number(encAmt.value));
+      encOut.innerHTML = '<span class="ok">Deposit accepted.</span>';
+    } catch (e) {
+      encOut.innerHTML = `<span class="bad">Rejected: ${e.message}</span>`;
+    }
+    refreshEnc();
+  });
+  document.getElementById('wdBtn').addEventListener('click', () => {
+    try {
+      riya.withdraw(Number(encAmt.value));
+      encOut.innerHTML = '<span class="ok">Withdrawal accepted.</span>';
+    } catch (e) {
+      encOut.innerHTML = `<span class="bad">Rejected: ${e.message}</span>`;
+    }
+    refreshEnc();
+  });
+  document.getElementById('directBtn').addEventListener('click', () => {
+    encOut.innerHTML =
+      `<span class="bad">riya.balance is ${riya.balance}</span>  (no public attribute named balance)\n` +
+      `The only way to change money is through deposit() or withdraw(), which check the amount.`;
+  });
+
+  // 6. Polymorphism demo
+  const starting = () => [
+    new SavingsAccount('Riya', 10000),
+    new CurrentAccount('Arjun', 5000),
+    new SavingsAccount('Meera', 2500),
+    new BankAccount('Kabir', 3000)
+  ];
+  let accounts = starting();
+  const accTable = document.getElementById('accTable');
+  const monthOut = document.getElementById('monthOut');
+  function renderAccounts() {
+    accTable.innerHTML = accounts.map(a =>
+      `<tr><td>${a.owner}</td><td>${a.type}</td><td>${a.getBalance().toFixed(2)}</td></tr>`).join('');
+  }
+  document.getElementById('monthBtn').addEventListener('click', () => {
+    const lines = accounts.map(a => {
+      const result = a.monthEnd();           // same call, different behaviour
+      return `${a.owner.padEnd(8)} (${a.type.padEnd(8)}) ${result}`;
+    });
+    monthOut.textContent = lines.join('\n');
+    renderAccounts();
+  });
+  document.getElementById('resetAcc').addEventListener('click', () => {
+    accounts = starting();
+    monthOut.textContent = 'Accounts reset.';
+    renderAccounts();
+  });
+  renderAccounts();
+</script>
+</body>
+</html>
