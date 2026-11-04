@@ -1,3 +1,0 @@
-- amazon web services is on-demand delivery of it resources.
-- availability Zone - redendent data center for my data
-- 
