@@ -16,18 +16,18 @@
 - Target: AWS Certified Machine Learning Engineer – Associate, MLA-C02.
 - Current module: 00 — ML foundations and prerequisite assessment.
 - Active assignment: [001 — Frame an ML problem](lessons/001_ml_problem_framing.md).
-- Status: Assigned; awaiting learner's answers.
+- Status: First submission reviewed; awaiting targeted correction for Assignment 001.
 - Assignments completed: 0.
-- Assessed strengths: Not yet assessed.
-- Knowledge gaps: Not yet assessed.
-- Next action: Review answers to Assignment 001, then decide whether to reinforce problem framing or move to data splitting and evaluation.
+- Assessed strengths: Correctly identified classification and the yes/no outcome categories; selected two valid features.
+- Knowledge gaps: Prediction-time feature availability and future-information leakage; training versus inference. Classification reasoning and the label's time window need confirmation.
+- Next action: Review the three-part correction exercise in Assignment 001 before advancing.
 - Pace: One assignment per review cycle; no fixed completion date.
 
 ## Assignment history
 
 | Assignment | Topic | Status | Review result |
 |---|---|---|---|
-| 001 | Features, labels, problem type, training/inference, leakage | Awaiting submission | Not reviewed |
+| 001 | Features, labels, problem type, training/inference, leakage | Needs correction | Classification/categories correct; feature selection partially correct; leakage and training/inference need reinforcement |
 
 ## Module tracking
 
@@ -35,7 +35,7 @@ Module completion requires all relevant topics and practical outcomes to be revi
 
 | Module | Topic | Status |
 |---|---|---|
-| 00 | Python, SQL, mathematics, and ML revision | In progress — initial ML exercise assigned |
+| 00 | Python, SQL, mathematics, and ML revision | In progress — Assignment 001 correction pending |
 | 01 | AWS and software engineering foundations | Not assessed |
 | 02 | Storage and data formats | Not assessed |
 | 03 | Batch and streaming ingestion | Not assessed |
@@ -62,4 +62,11 @@ Module completion requires all relevant topics and practical outcomes to be revi
 
 ## Review and recall log
 
-No learner submissions reviewed yet. Add demonstrated strengths, misconceptions, corrections, and recall topics here as evidence becomes available.
+### Assignment 001 — first review
+
+- Original answers preserved in the assignment file.
+- Recognized classification and yes/no labels; chose plan and October support tickets correctly.
+- Selected future November cancellation date as a feature instead of October logins.
+- Leakage explanation did not establish that the future outcome is unavailable on 1 November.
+- Learner explicitly reported not knowing training versus inference; explanation and a targeted exercise supplied.
+- No assignment or module marked complete. Recheck these concepts now and again in a later recall exercise.
