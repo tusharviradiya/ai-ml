@@ -1,6 +1,6 @@
 # Assignment 004 — Accuracy, baselines, and class imbalance
 
-Module: 00, with introductory links to Modules 05 and 11. Suggested time: 15–20 minutes. Status: Assigned; awaiting submission.
+Module: 00, with introductory links to Modules 05 and 11. Suggested time: 15–20 minutes. Status: Complete; first submission correct.
 
 ## Lesson
 
@@ -29,3 +29,15 @@ Reply with answers 1–3. No coding or AWS resources needed. The historical outc
 ## Review criteria
 
 Correct count and accuracy calculation; distinguish correct non-cancellation predictions from detected cancellations; explain why high accuracy can conceal failure on the minority class. Assignment remains incomplete until reviewed.
+
+## Submission 1 — original wording (5 November 2026)
+
+> 1. 950 are correct, 95%, 950 / 1000 * 100
+> 2. 0
+> 3. no, because this is only predict subscribers will stay, and not predict that subsciber will cancle. thats why.
+
+## Review and completion
+
+- All three answers correct: 950 correct predictions, 95% accuracy with the right calculation, and zero detected cancellations.
+- Correct explanation that always predicting stay fails to identify cancellations, so accuracy alone cannot assess the intended business goal.
+- Assignment 004 complete on first submission. Next: Assignment 005, confusion matrix, precision, and recall. Module 00 remains in progress.

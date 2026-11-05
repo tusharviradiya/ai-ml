@@ -18,12 +18,12 @@
 - Preparation completion target: **30 November 2026**; December is reserved for M.Tech exams.
 - Available time: **2–3 hours daily**, confirmed by the learner. Active calendar: [November completion plan](08_NOVEMBER_COMPLETION_PLAN.md).
 - Current module: 00 — ML foundations and prerequisite assessment.
-- Active assignment: [004 — Accuracy, baselines, and class imbalance](lessons/004_accuracy_and_class_imbalance.md).
-- Status: Assignment 003 complete after review; Assignment 004 awaiting submission.
-- Assignments completed: 3.
-- Assessed strengths: Correctly identified classification and yes/no categories. Selected all three valid features and explained future-outcome leakage in the December transfer example. Previously identified training/inference and explained inference as prediction. Correctly chooses candidate models using validation performance.
-- Knowledge gaps: Correctly recognized overfitting, underfitting, and the promising candidate in Assignment 003; score-based reasons for A/B need later recall. "Balance" requires both useful scores and a small gap. Retain test independence versus overtraining, training as learning, classification reasoning, and precise label windows for recall. Accuracy/baselines/imbalance are newly introduced.
-- Next action: Review Assignment 004's baseline cancellation scenario. Revisit test independence and earlier concepts in later recall. Collect course/access information as available. The calendar does not mark any pending work complete.
+- Active assignment: [006 — Decision thresholds](lessons/006_decision_thresholds.md).
+- Status: Assignment 005 complete after correction; Assignment 006 awaiting submission.
+- Assignments completed: 5.
+- Assessed strengths: Correctly identified classification and yes/no categories. Selected all three valid features and explained future-outcome leakage in the December transfer example. Previously identified training/inference and explained inference as prediction. Correctly chooses candidate models using validation performance. Calculates baseline accuracy and explains why 95% accuracy with zero detected cancellations is insufficient for finding cancellations.
+- Knowledge gaps: Assignment 005 correction correctly calculates precision/recall and identifies FP/FN; reinforced whole denominator groups, not just their error components. Retain this distinction and score-based overfitting/underfitting reasoning, test independence versus overtraining, training as learning, classification reasoning, and precise label windows for recall. Decision thresholds are newly introduced and unassessed.
+- Next action: Review Assignment 006's two-threshold validation scenario and error tradeoff. Revisit earlier concepts in later recall. Collect course/access information as available. The calendar does not mark any pending work complete.
 - Pace: One assignment per review cycle within the 2–3-hour daily limit, targeting preparation completion by 30 November. No required December AWS study is scheduled. The earlier 16-week calendar is superseded; mastery and readiness remain evidence-based.
 
 ## Assignment history
@@ -35,7 +35,9 @@ Planning update: [Premium plan and access evidence](06_SKILL_BUILDER_PREMIUM_PLA
 | 001 | Features, labels, problem type, training/inference, leakage | Complete after guided corrections | Feature availability/leakage demonstrated; training recognized in final check; precision and retention require later recall |
 | 002 | Training, validation, and test data | Complete after guided corrections | Split counts and validation selection correct; recognizes risk to new-data performance; precise mechanism needs later recall |
 | 003 | Overfitting and underfitting | Complete after review | All model choices correct; score-based A/B reasoning supplied in feedback and retained for recall |
-| 004 | Accuracy, baselines, and class imbalance | Active; awaiting submission | Not yet assessed |
+| 004 | Accuracy, baselines, and class imbalance | Complete; first submission correct | Correct calculation and explanation of missed minority-class outcomes |
+| 005 | Confusion matrix, precision, and recall | Complete after correction | Precision=80%, recall=60%, and missed-cancellation FN correct on transfer check |
+| 006 | Decision thresholds | Active; awaiting submission | Not yet assessed |
 
 ## Module tracking
 
@@ -43,7 +45,7 @@ Module completion requires all relevant topics and practical outcomes to be revi
 
 | Module | Topic | Status |
 |---|---|---|
-| 00 | Python, SQL, mathematics, and ML revision | In progress — Assignments 001–003 complete; Assignment 004 active |
+| 00 | Python, SQL, mathematics, and ML revision | In progress — Assignments 001–005 complete; Assignment 006 active |
 | 01 | AWS and software engineering foundations | Not assessed |
 | 02 | Storage and data formats | Not assessed |
 | 03 | Batch and streaming ingestion | Not assessed |
@@ -140,3 +142,22 @@ Module completion requires all relevant topics and practical outcomes to be revi
 - Reinforced that C has both high scores and a small gap; supplied the omitted score-based explanations for A/B and retained them for later recall.
 - Assignment 003 complete; overall count is 3. Module 00 remains in progress.
 - Assigned 004 with a worked majority-class baseline and an independent cancellation-count exercise. No cloud resources or subscription access required.
+
+### Assignment 004 — first review and completion (5 November 2026)
+
+- Saved submission verbatim; all three answers correct without correction.
+- Demonstrated 950 correct predictions, 95% baseline accuracy, zero detected cancellations, and why that fails the cancellation-detection goal.
+- Assignment 004 complete; overall completed count is 4. Assigned 005 with explicit positive class, confusion matrix, worked precision/recall calculations, and a new scenario. Module 00 remains in progress.
+
+### Assignment 005 — first review (5 November 2026)
+
+- Preserved submission verbatim. Predicted/actual distinction and FP/FN explanations correct.
+- Numerical confusion-matrix counts omitted; supplied TP=20, FP=10, FN=5, TN=65.
+- Precision and recall calculations swapped. Explained denominator populations: flagged cases versus actual cancellations; correct results are approximately 66.7% precision and 80% recall.
+- Assigned a new-count transfer check with denominator explanations. Assignment remains active; completed count stays 4.
+
+### Assignment 005 — correction review and completion (5 November 2026)
+
+- Saved submission verbatim. Correct precision=80%, recall=60%, FP/FN descriptions, and FN for missed cancellations.
+- Reinforced that denominator populations are all predicted positives versus all actual positives, including TP in both.
+- Assignment 005 complete after correction; overall count is 5. Assigned 006 with a threshold explanation, worked example, and six-row validation exercise. Module 00 remains in progress.
