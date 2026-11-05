@@ -14,9 +14,9 @@ We will combine tutor explanations and reviews with selected AWS Skill Builder c
 - [Learning progress and assignment history](LEARNING_PROGRESS.md)
 - [Revised Premium plan, course links, access evidence, and project gates](06_SKILL_BUILDER_PREMIUM_PLAN.md)
 - [Subscription access and course/lab evidence tracker](07_SKILL_BUILDER_TRACKER.md)
-- [Current assignment: 003 — Overfitting and underfitting](lessons/003_overfitting_underfitting.md)
+- [Current assignment: 004 — Accuracy, baselines, and class imbalance](lessons/004_accuracy_and_class_imbalance.md)
 
-The roadmap below is a reference for coverage. The Premium revision dated 5 November 2026 supersedes the earlier chat-only arrangement. The dated November calendar replaces the 16-week sequence; assignments still follow demonstrated understanding and practical work. Assignments 001–002 are complete after guided corrections; Assignment 003 is active.
+The roadmap below is a reference for coverage. The Premium revision dated 5 November 2026 supersedes the earlier chat-only arrangement. The dated November calendar replaces the 16-week sequence; assignments still follow demonstrated understanding and practical work. Assignments 001–003 are complete after review and corrections; Assignment 004 is active.
 
 ## Reference roadmap
 
@@ -62,4 +62,4 @@ The checklist and labs are an authored learning plan based on the official outli
 
 ## Current study session
 
-Complete Assignment 003 in chat. Your tutor will review it before advancing. Record current courses/account access in the resource tracker as available. Follow `LEARNING_PROGRESS.md` for the current position.
+Complete Assignment 004 in chat. Your tutor will review it before advancing. Record current courses/account access in the resource tracker as available. Follow `LEARNING_PROGRESS.md` for the current position.

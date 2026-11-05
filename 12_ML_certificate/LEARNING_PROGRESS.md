@@ -18,12 +18,12 @@
 - Preparation completion target: **30 November 2026**; December is reserved for M.Tech exams.
 - Available time: **2–3 hours daily**, confirmed by the learner. Active calendar: [November completion plan](08_NOVEMBER_COMPLETION_PLAN.md).
 - Current module: 00 — ML foundations and prerequisite assessment.
-- Active assignment: [003 — Overfitting and underfitting](lessons/003_overfitting_underfitting.md).
-- Status: Assignment 002 complete after guided corrections; Assignment 003 awaiting first submission.
-- Assignments completed: 2.
+- Active assignment: [004 — Accuracy, baselines, and class imbalance](lessons/004_accuracy_and_class_imbalance.md).
+- Status: Assignment 003 complete after review; Assignment 004 awaiting submission.
+- Assignments completed: 3.
 - Assessed strengths: Correctly identified classification and yes/no categories. Selected all three valid features and explained future-outcome leakage in the December transfer example. Previously identified training/inference and explained inference as prediction. Correctly chooses candidate models using validation performance.
-- Knowledge gaps: Learner now connects overfitting to worse performance on new images, but conflates overtraining with repeated test-based selection and assumes a drastic accuracy drop. Clarified these points; retain for recall alongside training as learning, classification reasoning, and precise label windows. Underfitting and training/validation gap interpretation are newly introduced.
-- Next action: Review Assignment 003's three-model comparison. Revisit test independence and earlier concepts in later recall. Collect course/access information as available. The calendar does not mark any pending work complete.
+- Knowledge gaps: Correctly recognized overfitting, underfitting, and the promising candidate in Assignment 003; score-based reasons for A/B need later recall. "Balance" requires both useful scores and a small gap. Retain test independence versus overtraining, training as learning, classification reasoning, and precise label windows for recall. Accuracy/baselines/imbalance are newly introduced.
+- Next action: Review Assignment 004's baseline cancellation scenario. Revisit test independence and earlier concepts in later recall. Collect course/access information as available. The calendar does not mark any pending work complete.
 - Pace: One assignment per review cycle within the 2–3-hour daily limit, targeting preparation completion by 30 November. No required December AWS study is scheduled. The earlier 16-week calendar is superseded; mastery and readiness remain evidence-based.
 
 ## Assignment history
@@ -34,7 +34,8 @@ Planning update: [Premium plan and access evidence](06_SKILL_BUILDER_PREMIUM_PLA
 |---|---|---|---|
 | 001 | Features, labels, problem type, training/inference, leakage | Complete after guided corrections | Feature availability/leakage demonstrated; training recognized in final check; precision and retention require later recall |
 | 002 | Training, validation, and test data | Complete after guided corrections | Split counts and validation selection correct; recognizes risk to new-data performance; precise mechanism needs later recall |
-| 003 | Overfitting and underfitting | Active; awaiting first submission | Not yet assessed |
+| 003 | Overfitting and underfitting | Complete after review | All model choices correct; score-based A/B reasoning supplied in feedback and retained for recall |
+| 004 | Accuracy, baselines, and class imbalance | Active; awaiting submission | Not yet assessed |
 
 ## Module tracking
 
@@ -42,7 +43,7 @@ Module completion requires all relevant topics and practical outcomes to be revi
 
 | Module | Topic | Status |
 |---|---|---|
-| 00 | Python, SQL, mathematics, and ML revision | In progress — Assignments 001–002 complete; Assignment 003 active |
+| 00 | Python, SQL, mathematics, and ML revision | In progress — Assignments 001–003 complete; Assignment 004 active |
 | 01 | AWS and software engineering foundations | Not assessed |
 | 02 | Storage and data formats | Not assessed |
 | 03 | Batch and streaming ingestion | Not assessed |
@@ -132,3 +133,10 @@ Module completion requires all relevant topics and practical outcomes to be revi
 - Learner asked whether 35% training and 30% validation accuracy is good or underfitting; preserved the question in the lesson.
 - Explained that a small gap is insufficient: compare score levels with a task-appropriate baseline. Poor scores on both sets suggest underfitting or another learning/data issue, not a definitive diagnosis.
 - Used balanced binary and 10-class baselines to show why the task matters. Original Assignment 003 remains pending; no new task or completion recorded.
+
+### Assignment 003 — submission review and completion (5 November 2026)
+
+- Preserved the learner's answer verbatim. A overfitting, B underfitting, and C for final testing are all correct.
+- Reinforced that C has both high scores and a small gap; supplied the omitted score-based explanations for A/B and retained them for later recall.
+- Assignment 003 complete; overall count is 3. Module 00 remains in progress.
+- Assigned 004 with a worked majority-class baseline and an independent cancellation-count exercise. No cloud resources or subscription access required.

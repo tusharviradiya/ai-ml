@@ -1,6 +1,6 @@
 # Assignment 003 — Overfitting and underfitting
 
-Module: 00. Suggested time: 15–20 minutes. Status: Assigned; awaiting first submission.
+Module: 00. Suggested time: 15–20 minutes. Status: Complete after review; later recall will check explanations of A and B. Historical task and clarification below are preserved.
 
 ## Lesson
 
@@ -45,3 +45,19 @@ Explanation: close scores alone do not establish a good model. Check both their 
 Context matters: on a balanced two-class task, a constant majority-class prediction achieves 50%, so these scores are worse than that simple baseline and merit checking features, labels, implementation, model capacity, and training. On a balanced 10-class task, uniform guessing averages 10%, so 30% validation beats that baseline but may still be insufficient for the intended use. These two scores alone cannot prove underfitting or identify its cause.
 
 Working rule: good and close is promising; poor and close suggests underfitting/learning problems; high training and much lower validation suggests overfitting. Interpret these as diagnostic clues within the task context. Assignment 003 remains awaiting its original submission; no extra task or completion recorded.
+
+## Submission 1 — original wording (5 November 2026)
+
+> for assignment 3
+> 1. model A shows overfitting
+> 2. model B is underfitting
+> 3. model C is good for us and we choose it for final testing. because this have balance with validation accuracy and training accurancy.
+
+## Review and completion
+
+- All three choices are correct under the stated exercise assumptions.
+- A suggests overfitting: 99% training versus 70% validation is a large, 29 percentage-point gap.
+- B suggests underfitting: 60% training and 59% validation are both relatively poor for this exercise. Similarity alone does not make performance good.
+- C is the best candidate for final testing: 96% training and 95% validation are both high and close. "Balance" should mean both useful score levels and a small gap, rather than closeness alone.
+- Learner did not independently give score-based reasons for A and B; supplied feedback and retain those explanations for later recall. No need to repeat the full exercise now.
+- Assignment 003 complete; Module 00 remains in progress. Next: Assignment 004, accuracy, baselines, and class imbalance.
