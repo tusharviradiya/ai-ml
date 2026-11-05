@@ -18,12 +18,12 @@
 - Preparation completion target: **30 November 2026**; December is reserved for M.Tech exams.
 - Available time: **2–3 hours daily**, confirmed by the learner. Active calendar: [November completion plan](08_NOVEMBER_COMPLETION_PLAN.md).
 - Current module: 00 — ML foundations and prerequisite assessment.
-- Active assignment: [002 — Training, validation, and test data](lessons/002_train_validation_test.md).
-- Status: Assignment 001 complete after guided corrections; Assignment 002 assigned and awaiting first submission.
-- Assignments completed: 1.
-- Assessed strengths: Correctly identified classification and yes/no categories. Selected all three valid features and explained future-outcome leakage in the December transfer example. Previously identified training/inference and explained inference as prediction.
-- Knowledge gaps: Introductory concepts required guidance; revisit training as learning (not simply possessing data), classification reasoning, and precise label windows in later recall. Data splitting and independent evaluation are newly introduced and not yet assessed.
-- Next action: Review Assignment 002 answers. Revisit Assignment 001 concepts in later recall. Collect course/access information as available. The calendar does not mark any pending work complete.
+- Active assignment: [003 — Overfitting and underfitting](lessons/003_overfitting_underfitting.md).
+- Status: Assignment 002 complete after guided corrections; Assignment 003 awaiting first submission.
+- Assignments completed: 2.
+- Assessed strengths: Correctly identified classification and yes/no categories. Selected all three valid features and explained future-outcome leakage in the December transfer example. Previously identified training/inference and explained inference as prediction. Correctly chooses candidate models using validation performance.
+- Knowledge gaps: Learner now connects overfitting to worse performance on new images, but conflates overtraining with repeated test-based selection and assumes a drastic accuracy drop. Clarified these points; retain for recall alongside training as learning, classification reasoning, and precise label windows. Underfitting and training/validation gap interpretation are newly introduced.
+- Next action: Review Assignment 003's three-model comparison. Revisit test independence and earlier concepts in later recall. Collect course/access information as available. The calendar does not mark any pending work complete.
 - Pace: One assignment per review cycle within the 2–3-hour daily limit, targeting preparation completion by 30 November. No required December AWS study is scheduled. The earlier 16-week calendar is superseded; mastery and readiness remain evidence-based.
 
 ## Assignment history
@@ -33,7 +33,8 @@ Planning update: [Premium plan and access evidence](06_SKILL_BUILDER_PREMIUM_PLA
 | Assignment | Topic | Status | Review result |
 |---|---|---|---|
 | 001 | Features, labels, problem type, training/inference, leakage | Complete after guided corrections | Feature availability/leakage demonstrated; training recognized in final check; precision and retention require later recall |
-| 002 | Training, validation, and test data | Active; awaiting first submission | Not yet assessed |
+| 002 | Training, validation, and test data | Complete after guided corrections | Split counts and validation selection correct; recognizes risk to new-data performance; precise mechanism needs later recall |
+| 003 | Overfitting and underfitting | Active; awaiting first submission | Not yet assessed |
 
 ## Module tracking
 
@@ -41,7 +42,7 @@ Module completion requires all relevant topics and practical outcomes to be revi
 
 | Module | Topic | Status |
 |---|---|---|
-| 00 | Python, SQL, mathematics, and ML revision | In progress — Assignment 001 complete; Assignment 002 active |
+| 00 | Python, SQL, mathematics, and ML revision | In progress — Assignments 001–002 complete; Assignment 003 active |
 | 01 | AWS and software engineering foundations | Not assessed |
 | 02 | Storage and data formats | Not assessed |
 | 03 | Batch and streaming ingestion | Not assessed |
@@ -104,3 +105,30 @@ Module completion requires all relevant topics and practical outcomes to be revi
 - Clarified that learning from historical inputs and known outcomes defines training; availability of data alone is insufficient.
 - Marked Assignment 001 complete after guided corrections. Classification reasoning, precise label windows, and training/inference retention remain later recall targets. Module 00 remains incomplete.
 - Assigned 002 with an explanation and a single three-part image-data splitting scenario. No Skill Builder access or AWS spending needed for this task.
+
+### Assignment 002 — first review (5 November 2026)
+
+- Preserved all three answers verbatim in the lesson.
+- Validation-based candidate selection is correct. Counts were incomplete; test independence was not explained.
+- Explained percentage calculations and why repeated selection using test results compromises an independent assessment, beyond time/cost concerns.
+- Assigned one two-part correction scenario. Assignment 002 remains active; overall completed count stays 1.
+
+### Assignment 002 — second review (5 November 2026)
+
+- Preserved answers verbatim. All split counts and the choice of validation for development are correct.
+- Clarified that test scores are useful for independent final evaluation; the issue is repeatedly adapting development to the same test set.
+- Added a concrete repeated-test-selection example and assigned one short explanation of why performance may be worse on fresh images.
+- Assignment remains active; overall completed count stays 1.
+
+### Assignment 002 — third review and completion (5 November 2026)
+
+- Saved the answer verbatim. Learner identifies overfitting and the risk that 98% does not carry over to new images.
+- Clarified worse versus better performance, uncertainty about the size of any drop, and accuracy as an aggregate metric.
+- Distinguished repeated test-based model selection from training too long; test independence can be compromised without directly fitting on test records.
+- Assignment 002 complete after guided corrections; overall completed count is 2. Assigned 003 with an explanation of overfitting, underfitting, and training/validation patterns. Module 00 remains in progress.
+
+### Assignment 003 — clarification before submission (5 November 2026)
+
+- Learner asked whether 35% training and 30% validation accuracy is good or underfitting; preserved the question in the lesson.
+- Explained that a small gap is insufficient: compare score levels with a task-appropriate baseline. Poor scores on both sets suggest underfitting or another learning/data issue, not a definitive diagnosis.
+- Used balanced binary and 10-class baselines to show why the task matters. Original Assignment 003 remains pending; no new task or completion recorded.
