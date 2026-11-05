@@ -1,6 +1,8 @@
 # Study plan and practical work
 
-This is a suggested **16-week plan at 12–15 hours per week**, approximately 192–240 hours. This is a planning estimate, not an AWS training requirement or a prediction of when you will pass. Extend it if cloud or ML fundamentals are new; compress topics only when you can demonstrate the outcomes.
+Revised **5 November 2026** to integrate the reported student Skill Builder Premium subscription. See [the resource audit and access policy](06_SKILL_BUILDER_PREMIUM_PLAN.md) and [personal access tracker](07_SKILL_BUILDER_TRACKER.md). Resource IDs R01–R16 below refer to that audit. Public availability never establishes personal entitlement.
+
+**Preparation deadline: 30 November 2026. Exam date: 29 December 2026.** The learner has 2–3 hours daily and December M.Tech exams. Follow the [active November calendar](08_NOVEMBER_COMPLETION_PLAN.md), which supersedes the earlier 16-week estimate. Its 52–78-hour window targets all exam topics, focused labs and integrated capstones; full optional courses are a separate backlog. Demonstrated readiness remains to be assessed.
 
 Module numbers refer to [the topic checklist](01_TOPICS_TO_LEARN.md). No AWS resources have been provisioned by creating these files.
 
@@ -17,34 +19,19 @@ Attempt these without notes and record `independent`, `needed help`, or `not yet
 7. Explain a Docker image, a build pipeline, and a model serving endpoint.
 8. Explain embeddings, RAG, and fine-tuning using separate examples.
 
-Use the results to adjust Weeks 1–2. Existing exercises elsewhere in this repository are useful revision material, but file presence does not mean a topic is mastered.
+Use the results to adjust the opening November sessions. Existing exercises elsewhere in this repository are useful revision material, but file presence does not mean a topic is mastered.
 
-## Suggested schedule
+## Active schedule
 
-| Week | Main study | Practical evidence |
-|---|---|---|
-| 1 | Modules 00–01: diagnose gaps; AWS, IAM, CLI, core compute/networking | Diagnostic notes; Lab 01 |
-| 2 | Modules 02–03: storage, formats, ingestion, Glue/Athena | Lab 02; storage and ingestion comparison notes |
-| 3 | Modules 03–04: streaming, transformations, Feature Store | Lab 03; reusable preprocessing code |
-| 4 | Modules 05–06: quality, imbalance, labels, document/FM data | Lab 04; Domain 1 practice and error review |
-| 5 | Modules 07–08: algorithm, AI service, FM, and RAG choices | Model/service decision table; initial retrieval dataset |
-| 6 | Modules 09–10: managed training, hyperparameters, efficiency | Lab 05 |
-| 7 | Modules 11–12: ML and GenAI evaluation | Lab 09; Domain 2 practice and error review |
-| 8 | Modules 13–14: inference modes, containers, resource sizing | Lab 06 |
-| 9 | Modules 15 and 17: registry, rollout, orchestration, IaC | First part of Lab 07 |
-| 10 | Modules 16 and 18: agents, CI/CD, prompt/RAG versioning | Finish Lab 07; Lab 10; Domain 3 review |
-| 11 | Modules 19–20: drift, observability, failure diagnosis | Lab 11 |
-| 12 | Modules 21–23: permissions, private access, cost, safeguards | Lab 12; Domain 4 practice and error review |
-| 13 | Revisit Modules 06, 08, 12–13, 18: integrated RAG | Lab 08; improve retrieval and evaluation |
-| 14 | Traditional ML capstone | Capstone A evidence and incident exercise |
-| 15 | RAG/agent capstone and weak topics | Capstone B evidence; first full timed practice |
-| 16 | Mixed scenarios, targeted revision, exam logistics | Fresh timed practice; readiness checklist |
-
-Revisit earlier domains every week. The weeks are organized for learning dependencies rather than strictly distributing hours according to exam percentages.
+See [08_NOVEMBER_COMPLETION_PLAN.md](08_NOVEMBER_COMPLETION_PLAN.md) for dated targets from 5–30 November, resource priorities, time budget, catch-up allowance, and completion criteria. The 16-week table is superseded. Assign one reviewed task at a time rather than assigning the entire calendar as homework.
 
 ## Practical exercise catalogue
 
-These are exercise specifications to complete during learning, not prebuilt lab implementations. Start locally when possible. Use small, non-sensitive datasets and a sandbox account or supplied training lab for cloud work.
+These are authored exercise specifications, not claims about the exact contents of a Skill Builder course. Use selected hosted labs first where accessible; then demonstrate an independent variation. Respect sandbox restrictions and save permitted artifacts before expiry. Use small non-sensitive datasets. Own-account builds require separate cost planning; subscription access does not cover personal AWS usage.
+
+### Early project P0 — Serverless document intake
+
+Build one working upload/processing/status slice early, then incrementally add SQS retries, duplicate-event handling, SDK use, logs, least-privilege roles, and IaC. Follow the [project specification and resource mapping](06_SKILL_BUILDER_PREMIUM_PLAN.md). This complements the ML capstones with general AWS development skills. Use R06 and selected R10/R13 units only when accessible and appropriate; the complete application is our project, not a promised course lab.
 
 ### Lab 01 — AWS access and basic resources
 
@@ -182,7 +169,7 @@ Combine Labs 08–12. Include traceable ingestion, retrieval, a versioned prompt
 
 ## Weekly study method
 
-Use roughly 4 hours for reading/notes, 5–7 hours for practical work, and 3–4 hours for recall, practice questions, and correcting mistakes. Adapt the split to your gaps.
+Target roughly 20% tutor/course explanations, 60% building/debugging, and 20% recall/review. Temporarily spend more on foundations when needed. Choose a course unit that supports the current build; avoid duplicating complete overlapping learning plans. Record course progress and independent skill evidence separately in the resource tracker.
 
 For each topic, answer: What problem does it solve? When would I choose it? What do I configure? What commonly fails? What would I monitor? What costs money? How is access controlled?
 

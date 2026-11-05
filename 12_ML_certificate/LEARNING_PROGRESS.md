@@ -2,7 +2,7 @@
 
 ## Learning agreement
 
-- Teach directly in chat with a saved lesson in this folder. External reading is optional reference material, not assigned homework.
+- Updated 5 November 2026: combine tutor explanations/reviews with selected AWS Skill Builder Premium courses and hosted labs. The learner explicitly requested subscription integration, superseding the earlier chat-only arrangement. Verify access before assigning paid resources.
 - Give one manageable assignment at a time, following the syllabus and adapting to demonstrated understanding.
 - Explain the concept with a worked example before asking the learner to apply it to a different example.
 - Review submitted answers, explain errors, and request a targeted correction when needed before advancing.
@@ -14,20 +14,26 @@
 ## Current position
 
 - Target: AWS Certified Machine Learning Engineer – Associate, MLA-C02.
+- Exam date: **29 December 2026**, reported by the learner on 5 November 2026. Exam time and delivery details not provided.
+- Preparation completion target: **30 November 2026**; December is reserved for M.Tech exams.
+- Available time: **2–3 hours daily**, confirmed by the learner. Active calendar: [November completion plan](08_NOVEMBER_COMPLETION_PLAN.md).
 - Current module: 00 — ML foundations and prerequisite assessment.
-- Active assignment: [001 — Frame an ML problem](lessons/001_ml_problem_framing.md).
-- Status: First submission reviewed; awaiting targeted correction for Assignment 001.
-- Assignments completed: 0.
-- Assessed strengths: Correctly identified classification and the yes/no outcome categories; selected two valid features.
-- Knowledge gaps: Prediction-time feature availability and future-information leakage; training versus inference. Classification reasoning and the label's time window need confirmation.
-- Next action: Review the three-part correction exercise in Assignment 001 before advancing.
-- Pace: One assignment per review cycle; no fixed completion date.
+- Active assignment: [002 — Training, validation, and test data](lessons/002_train_validation_test.md).
+- Status: Assignment 001 complete after guided corrections; Assignment 002 assigned and awaiting first submission.
+- Assignments completed: 1.
+- Assessed strengths: Correctly identified classification and yes/no categories. Selected all three valid features and explained future-outcome leakage in the December transfer example. Previously identified training/inference and explained inference as prediction.
+- Knowledge gaps: Introductory concepts required guidance; revisit training as learning (not simply possessing data), classification reasoning, and precise label windows in later recall. Data splitting and independent evaluation are newly introduced and not yet assessed.
+- Next action: Review Assignment 002 answers. Revisit Assignment 001 concepts in later recall. Collect course/access information as available. The calendar does not mark any pending work complete.
+- Pace: One assignment per review cycle within the 2–3-hour daily limit, targeting preparation completion by 30 November. No required December AWS study is scheduled. The earlier 16-week calendar is superseded; mastery and readiness remain evidence-based.
 
 ## Assignment history
 
+Planning update: [Premium plan and access evidence](06_SKILL_BUILDER_PREMIUM_PLAN.md); [resource progress tracker](07_SKILL_BUILDER_TRACKER.md). Student Premium is learner-reported active. Exact completed courses and personal resource entitlements remain unknown; no new course or lab is marked complete or enrolled.
+
 | Assignment | Topic | Status | Review result |
 |---|---|---|---|
-| 001 | Features, labels, problem type, training/inference, leakage | Needs correction | Classification/categories correct; feature selection partially correct; leakage and training/inference need reinforcement |
+| 001 | Features, labels, problem type, training/inference, leakage | Complete after guided corrections | Feature availability/leakage demonstrated; training recognized in final check; precision and retention require later recall |
+| 002 | Training, validation, and test data | Active; awaiting first submission | Not yet assessed |
 
 ## Module tracking
 
@@ -35,7 +41,7 @@ Module completion requires all relevant topics and practical outcomes to be revi
 
 | Module | Topic | Status |
 |---|---|---|
-| 00 | Python, SQL, mathematics, and ML revision | In progress — Assignment 001 correction pending |
+| 00 | Python, SQL, mathematics, and ML revision | In progress — Assignment 001 complete; Assignment 002 active |
 | 01 | AWS and software engineering foundations | Not assessed |
 | 02 | Storage and data formats | Not assessed |
 | 03 | Batch and streaming ingestion | Not assessed |
@@ -70,3 +76,31 @@ Module completion requires all relevant topics and practical outcomes to be revi
 - Leakage explanation did not establish that the future outcome is unavailable on 1 November.
 - Learner explicitly reported not knowing training versus inference; explanation and a targeted exercise supplied.
 - No assignment or module marked complete. Recheck these concepts now and again in a later recall exercise.
+
+### Assignment 001 — second review (5 November 2026)
+
+- Preserved the learner's three answers verbatim in the lesson.
+- Support tickets correctly selected, but two other valid features and the leakage explanation were omitted.
+- Training and inference correctly identified; inference explanation is correct. Training reasoning and precise label values were not supplied.
+- Explained all three available features and future-information leakage; assigned a small December transfer check to verify application.
+- Assignment remains active; completed count remains 0.
+
+### Assignment 001 — concept clarification (5 November 2026)
+
+- Learner asked for a fuller explanation of data leakage before continuing the practice task.
+- Added prediction-time examples, indirect outcome leakage, the distinction between training labels and inputs, and a brief introduction to evaluation/preprocessing leakage.
+- December transfer check remains pending; no new task assigned and no mastery or completion inferred from the explanation.
+
+### Assignment 001 — third review (5 November 2026)
+
+- Saved the learner's answer verbatim. All three available features and the reason to exclude December cancellation dates are correct.
+- Recorded the feature availability/leakage transfer check as passed; later recall remains appropriate.
+- Clarified that applying the model on 1 December is inference. Supervised training needs historical inputs paired with known outcomes.
+- Assigned one sentence identifying learning from October activity and known November outcomes, with a reason. Assignment remains active; completed count remains 0.
+
+### Assignment 001 — fourth review and completion (5 November 2026)
+
+- Saved final answer verbatim: correctly identified training, with a broad explanation about having required data.
+- Clarified that learning from historical inputs and known outcomes defines training; availability of data alone is insufficient.
+- Marked Assignment 001 complete after guided corrections. Classification reasoning, precise label windows, and training/inference retention remain later recall targets. Module 00 remains incomplete.
+- Assigned 002 with an explanation and a single three-part image-data splitting scenario. No Skill Builder access or AWS spending needed for this task.

@@ -1,6 +1,6 @@
 # Official resources and reading order
 
-Reviewed on **4 November 2026**. Start with the exam documents, then use technical documentation to answer concrete questions from the checklist. You do not need to read every linked developer guide from beginning to end.
+Exam/technical references reviewed on **4 November 2026**. Skill Builder integration added **5 November 2026**: see [the Premium resource audit](06_SKILL_BUILDER_PREMIUM_PLAN.md) for course/lab links, access evidence, classroom distinctions, and module mapping; see [the tracker](07_SKILL_BUILDER_TRACKER.md) for personal access and completion evidence. The audit supplements these technical references; it does not establish personal entitlement. You do not need to read every linked developer guide from beginning to end.
 
 ## Exam authority
 

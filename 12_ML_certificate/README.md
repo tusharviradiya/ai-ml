@@ -2,28 +2,33 @@
 
 Target: **MLA-C02**, the version in [your AWS exam guide](https://docs.aws.amazon.com/aws-certification/latest/machine-learning-engineer-associate-02/machine-learning-engineer-associate-02.html). Sources checked **4 November 2026**.
 
+**Exam date: 29 December 2026** — learner-reported on 5 November 2026. **Preparation completion target: 30 November 2026**, with **2–3 hours daily**. December is reserved for M.Tech exams. Follow the [active November calendar](08_NOVEMBER_COMPLETION_PLAN.md); the earlier 16-week schedule is superseded.
+
 The goal is to learn how to prepare data, develop models, deploy workflows, and operate secure ML and generative AI applications on AWS. Expect questions that require choosing a suitable service or fixing a production problem under cost, latency, reliability, and security constraints.
 
 ## Guided learning — start here
 
-We will learn directly in chat, one lesson and assignment at a time. I will review your answers, explain corrections, and save progress here. No external course or reading is required for assigned lessons.
+We will combine tutor explanations and reviews with selected AWS Skill Builder courses and hosted labs from your reported active student Premium subscription. We will still assign one manageable task at a time. Access to a paid item must be checked before assigning it; a public catalog listing does not verify your account entitlement.
 
+- [Active November completion calendar](08_NOVEMBER_COMPLETION_PLAN.md)
 - [Learning progress and assignment history](LEARNING_PROGRESS.md)
-- [Current assignment: 001 — Frame an ML problem](lessons/001_ml_problem_framing.md)
+- [Revised Premium plan, course links, access evidence, and project gates](06_SKILL_BUILDER_PREMIUM_PLAN.md)
+- [Subscription access and course/lab evidence tracker](07_SKILL_BUILDER_TRACKER.md)
+- [Current assignment: 002 — Training, validation, and test data](lessons/002_train_validation_test.md)
 
-The roadmap below is a reference for coverage. The earlier 16-week schedule is optional; our active pace follows your understanding and completed work.
+The roadmap below is a reference for coverage. The Premium revision dated 5 November 2026 supersedes the earlier chat-only arrangement. The dated November calendar replaces the 16-week sequence; assignments still follow demonstrated understanding and practical work. Assignment 001 is complete after guided corrections; Assignment 002 is active.
 
 ## Reference roadmap
 
 | File | What you get |
 |---|---|
 | [01_TOPICS_TO_LEARN.md](01_TOPICS_TO_LEARN.md) | Detailed topic checklist, prerequisites, learning outcomes, and mapping to every official task and skill range |
-| [02_STUDY_PLAN_AND_LABS.md](02_STUDY_PLAN_AND_LABS.md) | Suggested 16-week schedule, practical exercises, and two capstone projects |
+| [02_STUDY_PLAN_AND_LABS.md](02_STUDY_PLAN_AND_LABS.md) | Premium-integrated provisional schedule, practical exercises, an early developer project, and two capstones |
 | [03_AWS_SERVICES_CHECKLIST.md](03_AWS_SERVICES_CHECKLIST.md) | Services to study, suggested depth, and important service comparisons |
 | [04_EXAM_READINESS.md](04_EXAM_READINESS.md) | Scenario practice, revision method, mistakes to avoid, and readiness criteria |
 | [05_OFFICIAL_RESOURCES.md](05_OFFICIAL_RESOURCES.md) | Official exam and technical documentation, grouped by topic |
 
-Your existing `AWS_Technical_Essential/day_1.txt` is preserved. Start with the AWS foundations checklist in Module 01, then use the diagnostic in the study plan to decide how much ML revision you need. Your `../11_Practice/` exercises can support that revision.
+Your existing `AWS_Technical_Essential/day_1.txt` is preserved. Existing courses and exercises can count toward the plan after reviewing their coverage and evidence; a restart is not required. Your `../11_Practice/` exercises can support targeted revision.
 
 ## What AWS expects
 
@@ -57,4 +62,4 @@ The checklist and labs are an authored learning plan based on the official outli
 
 ## Current study session
 
-Complete Assignment 001 in chat. Your tutor will review it before assigning the next task. Follow `LEARNING_PROGRESS.md` for the current position when returning to study.
+Complete Assignment 002 in chat. Your tutor will review it before advancing. Record current courses/account access in the resource tracker as available. Follow `LEARNING_PROGRESS.md` for the current position.
